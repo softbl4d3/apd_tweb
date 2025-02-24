@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "D:\\Tweb\\apd_tweb\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE9B40A5-563F-4425-9B02-2F6AB193C739}|eUseControl.RestaurantStaffProject.csproj|d:\\tweb\\apd_tweb\\controllers\\loginpagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE9B40A5-563F-4425-9B02-2F6AB193C739}|eUseControl.RestaurantStaffProject.csproj|solutionrelative:controllers\\loginpagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE9B40A5-563F-4425-9B02-2F6AB193C739}|eUseControl.RestaurantStaffProject.csproj|d:\\tweb\\apd_tweb\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DE9B40A5-563F-4425-9B02-2F6AB193C739}|eUseControl.RestaurantStaffProject.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE9B40A5-563F-4425-9B02-2F6AB193C739}|eUseControl.RestaurantStaffProject.csproj|d:\\tweb\\apd_tweb\\views\\login\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{DE9B40A5-563F-4425-9B02-2F6AB193C739}|eUseControl.RestaurantStaffProject.csproj|solutionrelative:views\\login\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE9B40A5-563F-4425-9B02-2F6AB193C739}|eUseControl.RestaurantStaffProject.csproj|d:\\tweb\\apd_tweb\\views\\chefpage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{DE9B40A5-563F-4425-9B02-2F6AB193C739}|eUseControl.RestaurantStaffProject.csproj|solutionrelative:views\\chefpage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE9B40A5-563F-4425-9B02-2F6AB193C739}|eUseControl.RestaurantStaffProject.csproj|d:\\tweb\\apd_tweb\\controllers\\loginpagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE9B40A5-563F-4425-9B02-2F6AB193C739}|eUseControl.RestaurantStaffProject.csproj|solutionrelative:controllers\\loginpagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE9B40A5-563F-4425-9B02-2F6AB193C739}|eUseControl.RestaurantStaffProject.csproj|D:\\Tweb\\apd_tweb\\app_start\\routeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -47,12 +55,38 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\Tweb\\apd_tweb\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\Tweb\\apd_tweb\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAAABsAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-24T21:23:43.934Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\Tweb\\apd_tweb\\Views\\ChefPage\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\ChefPage\\Index.cshtml",
+              "ToolTip": "D:\\Tweb\\apd_tweb\\Views\\ChefPage\\Index.cshtml",
+              "RelativeToolTip": "Views\\ChefPage\\Index.cshtml",
+              "ViewState": "AgIAAKsAAAAAAAAAAAAAALAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-24T21:19:02.19Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "LoginPageController.cs",
               "DocumentMoniker": "D:\\Tweb\\apd_tweb\\Controllers\\LoginPageController.cs",
               "RelativeDocumentMoniker": "Controllers\\LoginPageController.cs",
               "ToolTip": "D:\\Tweb\\apd_tweb\\Controllers\\LoginPageController.cs",
               "RelativeToolTip": "Controllers\\LoginPageController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAQwBoAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-24T21:06:50.617Z",
               "EditorCaption": ""
@@ -65,14 +99,14 @@
               "RelativeDocumentMoniker": "Views\\Login\\index.cshtml",
               "ToolTip": "D:\\Tweb\\apd_tweb\\Views\\Login\\index.cshtml",
               "RelativeToolTip": "Views\\Login\\index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAHAAAAAAAAAA==",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAAFAAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-02-24T21:04:01.803Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "ChefPageController.cs",
               "DocumentMoniker": "D:\\Tweb\\apd_tweb\\Controllers\\ChefPageController.cs",
               "RelativeDocumentMoniker": "Controllers\\ChefPageController.cs",
@@ -85,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": ".gitingore",
               "DocumentMoniker": "D:\\Tweb\\apd_tweb\\.gitingore",
               "RelativeDocumentMoniker": ".gitingore",
@@ -98,7 +132,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "RouteConfig.cs",
               "DocumentMoniker": "D:\\Tweb\\apd_tweb\\App_Start\\RouteConfig.cs",
               "RelativeDocumentMoniker": "App_Start\\RouteConfig.cs",
@@ -111,7 +145,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": ".gitignore",
               "DocumentMoniker": "D:\\Tweb\\apd_tweb\\.gitignore",
               "RelativeDocumentMoniker": ".gitignore",
@@ -124,7 +158,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "LoginController.cs",
               "DocumentMoniker": "D:\\Tweb\\apd_tweb\\Controllers\\LoginController.cs",
               "RelativeDocumentMoniker": "Controllers\\LoginController.cs",
@@ -137,7 +171,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "web.config",
               "DocumentMoniker": "D:\\Tweb\\apd_tweb\\Views\\web.config",
               "RelativeDocumentMoniker": "Views\\web.config",
