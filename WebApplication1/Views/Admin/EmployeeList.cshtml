@@ -1,0 +1,38 @@
+﻿@model IEnumerable<eUseControl.Web.Models.Employee>
+
+@{
+    ViewBag.Title = "Список сотрудников";
+}
+
+<h2>Список сотрудников</h2>
+
+<p>
+    @Html.ActionLink("Добавить сотрудника", "RegisterEmployee", "Admin", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Логин</th>
+            <th>Роль</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.Id</td>
+                <td>@employee.UserName</td>
+                <td>@employee.Role</td>
+                <td>
+                    <!-- Пример ссылок на редактирование и удаление.
+                         Реализация действий "EditEmployee" и "DeleteEmployee" зависит от вашей логики. -->
+                    @Html.ActionLink("Редактировать", "EditEmployee", new { id = employee.Id }, null) |
+                    @Html.ActionLink("Удалить", "DeleteEmployee", new { id = employee.Id }, null)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

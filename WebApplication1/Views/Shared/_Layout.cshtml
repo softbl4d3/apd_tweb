@@ -1,0 +1,29 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>eUseSystem | @ViewBag.Title</title>
+
+    <!-- Подключение бандлов CSS -->
+    @Styles.Render("~/bundles/bootstrap/css")
+    @Styles.Render("~/bundles/font-awesome/css")
+    @Styles.Render("~/bundles/toaster/css")
+    @Styles.Render("~/bundles/datatables/css")
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    @Html.Partial("_Header")
+    <!-- Основной контент страниц -->
+    @RenderBody()
+
+    <!-- Подключение бандлов JS -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap/js")
+</body>
+</html>
