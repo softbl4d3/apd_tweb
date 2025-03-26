@@ -49,11 +49,11 @@ namespace eUseControl.Web.Controllers
             // var employees = db.Employees.ToList();
 
             // Для наглядности пока сделаем заглушку (Fake):
-            var employees = new List<Employee>
+            var employees = new List<User>
     {
-        new Employee { Id = 1, UserName = "admin", Role = "Admin" },
-        new Employee { Id = 2, UserName = "ivan", Role = "Waiter" },
-        new Employee { Id = 3, UserName = "olga", Role = "Chef" }
+        new User { UserName = "admin", Role = "Admin" },
+        new User { UserName = "ivan", Role = "Waiter" },
+        new User { UserName = "olga", Role = "Chef" }
     };
 
             return View(employees);
