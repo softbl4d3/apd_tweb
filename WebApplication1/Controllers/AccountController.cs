@@ -36,7 +36,6 @@ namespace eUseControl.Web.Controllers
                         return View(model);
                 }
             }
-            // Add a return statement for when ModelState is not valid
             return View(model);
         }
     }

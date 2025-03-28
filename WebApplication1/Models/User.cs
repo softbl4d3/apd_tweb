@@ -16,6 +16,7 @@ namespace eUseControl.Web.Models
 
         [Required]
         [Display(Name = "Роль")]
+        [RegularExpression("^(Admin|Chef|Waiter)$", ErrorMessage = "Role must be either 'Admin', 'Chef', or 'Waiter'.")]
         public string Role { get; set; }
     }
 }

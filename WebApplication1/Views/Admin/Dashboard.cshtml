@@ -1,0 +1,89 @@
+﻿@model eUseControl.Web.DTO.AdminDashboard
+
+@{
+    ViewBag.Title = "Администратор - Текущая посадка и заказы";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>Текущая рассадка столиков</h2>
+
+    <div class="row">
+        @foreach (var table in Model.Tables)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card @GetTableStatusClass(table.Status)">
+                    <div class="card-body">
+                        <h5 class="card-title">Столик #@table.TableNumber</h5>
+                        <p class="card-text">
+                            Вместимость: @table.Capacity чел.<br>
+                            Зона: @table.Zone<br>
+                            Статус: @table.Status
+                        </p>
+                        @if (table.ReservationTime.HasValue)
+                        {
+                            <small class="text-muted">
+                                Бронь до: @table.ReservationTime.Value.ToString("g")
+                            </small>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <h2>Текущие заказы</h2>
+
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>№ заказа</th>
+                <th>Столик</th>
+                <th>Время создания</th>
+                <th>Сумма</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.CurrentOrders)
+            {
+                <tr>
+                    <td>@order.OrderNumber</td>
+                    <td>@order.TableId</td>
+                    <td>@order.CreatedTime.ToString("g")</td>
+                    <td>@order.TotalAmount.ToString("C")</td>
+                    <td>
+                        <span class="badge @GetOrderStatusClass(order.Status)">
+                            @order.Status
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@functions {
+    string GetTableStatusClass(string status)
+    {
+        return status switch
+        {
+            "Occupied" => "border-danger",
+            "Reserved" => "border-warning",
+            _ => "border-success"
+        };
+    }
+
+    string GetOrderStatusClass(string status)
+    {
+        return status switch
+        {
+            "New" => "badge-secondary",
+            "InProgress" => "badge-primary",
+            "Ready" => "badge-info",
+            "Completed" => "badge-success",
+            "Cancelled" => "badge-danger",
+            _ => "badge-light"
+        };
+    }
+}
