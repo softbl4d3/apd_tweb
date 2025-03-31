@@ -12,8 +12,8 @@ namespace eUseControl.Web
                 new CssRewriteUrlTransform()));
 
             //// Bootstrap JS
-            //bundles.Add(new ScriptBundle("~/bundles/bootstrap/js").Include(
-            //    "~/Scripts/bootstrap.min.js"));
+           // bundles.Add(new ScriptBundle("~/bundles/bootstrap/js").Include(
+             //   "~/Scripts/bootstrap.min.js"));
 
             // Font Awesome
             bundles.Add(new StyleBundle("~/bundles/font-awesome/css").Include(

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{208E2F7E-8465-4486-87F4-C21154BA92A2}</ProjectGuid>
+    <ProjectGuid>{E665BAED-6C4A-4E22-B801-07F0478B92DD}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>eUseControl.BusinessLogic</RootNamespace>
-    <AssemblyName>eUseControl.BusinessLogic</AssemblyName>
+    <RootNamespace>eUseControl.Domain</RootNamespace>
+    <AssemblyName>eUseControl.Domain</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -39,21 +39,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\eUseControl.Domain\eUseControl.Domain.csproj">
-      <Project>{e665baed-6c4a-4e22-b801-07f0478b92dd}</Project>
-      <Name>eUseControl.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\eUseControl.Helpers\eUseControl.Helpers.csproj">
       <Project>{43fad686-b2dd-4a12-bcba-afd8ba3f180d}</Project>
       <Name>eUseControl.Helpers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLogic.cs" />
-    <Compile Include="Core\UserApi.cs" />
-    <Compile Include="Interfaces\ISession.cs" />
-    <Compile Include="SessionBL.cs" />
+    <Compile Include="Entities\DTO\ChefDTO.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

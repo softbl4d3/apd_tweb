@@ -1,0 +1,51 @@
+﻿@model List<eUseControl.Web.Models.OrderItem>
+@{
+    ViewBag.Title = "Панель повара";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .order-item .card {
+        transition: transform 0.2s;
+        min-height: 250px;
+    }
+
+        .order-item .card:hover {
+            transform: translateY(-5px);
+            cursor: pointer;
+        }
+
+    .complete-btn {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+    }
+</style>
+
+<div class="container mt-4">
+    <h2>Текущие заказы</h2>
+    <div class="row" id="orders-container">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4 order-item" data-id="@item.Id">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Заказ #@item.Id</h5>
+                        <p class="card-text">
+                            Блюдо ID: @item.DishId<br>
+                            Количество: @item.Amount<br>
+                            Цена: @item.Price.ToString("C")<br>
+                            Примечание: @item.Note
+                        </p>
+                        <form method="post" action="@Url.Action("MarkAsDone", "Chef")">
+                            @Html.Hidden("id", item.Id)
+                            <button type="submit" class="btn btn-primary complete-btn">
+                                Отметить готовым
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
