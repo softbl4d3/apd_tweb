@@ -1,0 +1,47 @@
+﻿@model eUseControl.Web.Models.Dish
+
+@{
+    ViewBag.Title = "Редактировать блюдо";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Убедитесь, что путь правильный
+}
+
+<div class="container mt-4">
+    <h2>@ViewBag.Title</h2>
+    <hr />
+
+    @using (Html.BeginForm("Edit", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id) <!-- Важно для сохранения ID -->
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, "Название", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, "Цена", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Price, new { @class = "form-control", type = "number", step = "0.01" })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsAvailable, "Доступно", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.IsAvailable, new { @class = "form-check-input" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                @Html.ActionLink("Отмена", "Menu", null, new { @class = "btn btn-secondary ml-2" })
+            </div>
+        </div>
+    }
+</div>

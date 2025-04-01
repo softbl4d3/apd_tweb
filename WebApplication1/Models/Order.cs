@@ -17,5 +17,7 @@ namespace eUseControl.Web.Models
         public string Status { get; set; } // "New", "InProgress", "Ready", "Completed", "Cancelled"
         public decimal TotalAmount { get; set; }
         public string Comment { get; set; }
+
+        public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

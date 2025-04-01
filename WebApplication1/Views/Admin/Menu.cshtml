@@ -1,0 +1,47 @@
+﻿@using eUseControl.Web.Models
+@model IEnumerable<Dish>
+
+<h2>Управление меню</h2>
+<p>
+    @Html.ActionLink("Добавить блюдо", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table">
+    <tr>
+        <th>Название</th>
+        <th>Цена</th>
+        <th>Доступно</th>
+        <th>Действия</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Price.ToString("C")</td>
+            <td>
+                <div class="status-toggle" data-id="@item.Id">
+                    <span class="@(item.IsAvailable ? "text-success" : "text-danger")">
+                        @(item.IsAvailable ? "✓" : "✕")
+                    </span>
+                </div>
+            </td>
+            <td>
+                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-warning" })
+                @Html.ActionLink("Удалить", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
+            </td>
+        </tr>
+    }
+</table>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('.status-toggle').click(function () {
+                var dishId = $(this).data('id');
+                $.post('@Url.Action("ToggleStatus")', { id: dishId }, function () {
+                    location.reload();
+                });
+            });
+        });
+    </script>
+}

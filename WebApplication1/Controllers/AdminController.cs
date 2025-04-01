@@ -62,7 +62,7 @@ namespace eUseControl.Web.Controllers
 
         public ActionResult Dashboard()
         {
-            
+
             var model = new AdminDashboard
             {
                 Tables = GetMockTables(),
@@ -104,6 +104,104 @@ namespace eUseControl.Web.Controllers
                 TotalAmount = 2300m
             }
         };
+        }
+
+        private static List<Dish> _dishes = new List<Dish> {
+            new Dish{
+                Id = 52,
+                Name = "карбонарик",
+                Description = "вкуснейшее блюдо",
+                Category= "Основное",
+                Price= 4200,
+                IsAvailable= true,
+                 Ingredients = "макарошки и еще чета",
+    },
+            new Dish{
+                Id = 12,
+                Name = "pizza",
+                Description = "итальянское блюдо",
+                Category= "Основное",
+                Price= 5200,
+                IsAvailable= true,
+                 Ingredients = "тесто и еще чета",
+            },
+
+
+
+        }; // Заглушка
+
+        // GET: Admin/Menu
+        public ActionResult Menu()
+        {
+            return View(_dishes);
+        }
+
+        // GET: Admin/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Admin/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Dish dish)
+        {
+            if (ModelState.IsValid)
+            {
+                _dishes.Add(dish);
+                return RedirectToAction("Menu");
+            }
+            return View(dish);
+        }
+
+        // GET: Admin/Edit/5
+        public ActionResult Edit(int id)
+        {
+            var dish = _dishes.FirstOrDefault(d => d.Id == id);
+            return View(dish);
+        }
+
+        // POST: Admin/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Dish updatedDish)
+        {
+            if (ModelState.IsValid)
+            {
+                var existing = _dishes.First(d => d.Id == updatedDish.Id);
+                _dishes.Remove(existing);
+                _dishes.Add(updatedDish);
+                return RedirectToAction("Menu");
+            }
+            return View(updatedDish);
+        }
+
+        // POST: Admin/ToggleStatus/5
+        [HttpPost]
+        public ActionResult ToggleStatus(int id)
+        {
+            var dish = _dishes.First(d => d.Id == id);
+            dish.IsAvailable = !dish.IsAvailable;
+            return RedirectToAction("Menu");
+        }
+
+        // GET: Admin/Delete/5
+        public ActionResult Delete(int id)
+        {
+            var dish = _dishes.First(d => d.Id == id);
+            _dishes.Remove(dish);
+            return RedirectToAction("Menu");
+        }
+
+        // POST: Admin/Delete/id
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var dish = _dishes.First(d => d.Id == id);
+            _dishes.Remove(dish);
+            return RedirectToAction("Menu");
         }
 
 

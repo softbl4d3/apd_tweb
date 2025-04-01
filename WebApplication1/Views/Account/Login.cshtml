@@ -36,6 +36,11 @@
                     @Html.RadioButtonFor(model => model.Role, "Chef") Повар
                 </label>
             </div>
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.Role, "Admin") Admin
+                </label>
+            </div>
         </div>
 
         <button type="submit" class="btn btn-primary">Зайти</button>

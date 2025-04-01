@@ -26,11 +26,11 @@ namespace eUseControl.Web.Controllers
                 switch (model.Role)
                 {
                     case "Admin":
-                        return RedirectToAction("Admin", "Admin");
+                        return RedirectToAction("Admin", "Dashboard");
                     case "Waiter":
-                        return RedirectToAction("Waiter", "Waiter");
+                        return RedirectToAction("Waiter", "Menu");
                     case "Chef":
-                        return RedirectToAction("Chef", "Chef");
+                        return RedirectToAction("Chef", "Dashboard");
                     default:
                         ModelState.AddModelError("", "Неверная роль или пароль");
                         return View(model);

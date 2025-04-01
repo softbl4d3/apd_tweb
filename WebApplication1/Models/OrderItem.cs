@@ -13,6 +13,8 @@ namespace eUseControl.Web.Models
         public int Amount { get; set; }
         public decimal Price { get; set; }
         public string Note { get; set; }
-        public string Status { get; set; } // Новое поле
+        public string Status { get; set; } 
+        public virtual Order Order { get; set; }
+        public virtual Dish Dish { get; set; }
     }
 }

@@ -1,0 +1,28 @@
+﻿@using eUseControl.Web.Models
+@model List<Table>
+
+@{
+    ViewBag.Title = "Выбор столика";
+}
+
+<div class="container mt-4">
+    <h2>Свободные столики</h2>
+    <div class="row">
+        @foreach (var table in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Столик #@table.TableNumber</h5>
+                        <p class="card-text">
+                            Вместимость: @table.Capacity человек<br>
+                            Статус: @table.Status
+                        </p>
+                        @Html.ActionLink("Взять заказ", "TakeOrder", new { tableId = table.Id },
+                            new { @class = "btn btn-primary" })
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

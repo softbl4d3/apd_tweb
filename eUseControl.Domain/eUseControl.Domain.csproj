@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\DTO\ChefDTO.cs" />
+    <Compile Include="Entities\DTO\WaiterDTO.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enums\" />

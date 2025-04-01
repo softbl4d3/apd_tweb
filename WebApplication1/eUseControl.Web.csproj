@@ -289,6 +289,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChefController.cs" />
+    <Compile Include="Controllers\WaiterController.cs" />
     <Compile Include="DTO\AdminDashboard.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -338,6 +339,14 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Admin\Dashboard.cshtml" />
     <Content Include="Views\Chef\Dashboard.cshtml" />
+    <Content Include="Views\Admin\Menu.cshtml" />
+    <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\Admin\Edit.cshtml" />
+    <Content Include="Views\Shared\_AdminNavigation.cshtml" />
+    <Content Include="Views\Shared\_ChefNavigation.cshtml" />
+    <Content Include="Views\Shared\_WaiterNavigation.cshtml" />
+    <Content Include="Views\Waiter\SelectTable.cshtml" />
+    <Content Include="Views\Waiter\TakeOrder.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
