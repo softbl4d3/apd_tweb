@@ -6,70 +6,43 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>eUseSystem | @ViewBag.Title</title>
+    <title>ReStik | @ViewBag.Title</title> 
 
-    <!-- Подключение бандлов CSS -->
+    @* Подключаем CSS Bootstrap и Font Awesome *@
     @Styles.Render("~/bundles/bootstrap/css")
     @Styles.Render("~/bundles/font-awesome/css")
-    @Styles.Render("~/bundles/toaster/css")
-    @Styles.Render("~/bundles/datatables/css")
 
-    <!-- Google Fonts -->
+    <link href="~/Content/Site.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
-    @RenderSection("Scripts", required: false)
 </head>
 <body>
-    <!-- Шапка сайта -->
+
+    @* Шапка сайта (будет фиксированной) *@
     @Html.Partial("_Header")
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Навигация слева -->
-            <div class="col-md-2">
-                @* Навигейшн бары для всех ролей *@
-                @* когда будет бдшка *@
-                @* @{
-                        var userRole = User.IsInRole("Admin") ? "Admin" : User.IsInRole("Waiter") ? "Waiter" : User.IsInRole("Chef") ? "Chef" : null;
-                        if (userRole != null)
-                        {
-                        @Html.Partial($"_{userRole}Navigation")
-                        }
-                    } *@
+    @* Боковая панель навигации (будет фиксированной) *@
+    @{
+        string userRole = null;
+        var path = Request.Url.AbsolutePath;
 
-                @{
-                string userRole = null;
-                var path = Request.Url.AbsolutePath;
+        if (path.StartsWith("/Admin")) { userRole = "Admin"; }
+        else if (path.StartsWith("/Waiter")) { userRole = "Waiter"; }
+        else if (path.StartsWith("/Chef")) { userRole = "Chef"; }
 
-                if (path.StartsWith("/Admin"))
-                {
-                    userRole = "Admin";
-                }
-                else if (path.StartsWith("/Waiter"))
-                {
-                    userRole = "Waiter";
-                }
-                else if (path.StartsWith("/Chef"))
-                {
-                    userRole = "Chef";
-                }
+        if (userRole != null)
+        {
+            @Html.Partial($"_{userRole}Navigation")
+        }
+    }
 
-                if (userRole != null)
-                {
-                    @Html.Partial($"_{userRole}Navigation")
-                }
-                }
-            </div>
+    @* Основной контейнер для контента страницы *@
+    <main class="main-content">
+        @RenderBody()
+    </main>
 
-            <!-- Основной контент страниц -->
-            <div class="col-md-10">
-                @RenderBody()
-            </div>
-        </div>
-    </div>
-
-    <!-- Подключение бандлов JS -->
     @Scripts.Render("~/bundles/jquery")
-<script src="~/Scripts/bootstrap.bundle.min.js"></script>
-    @RenderSection("Styles", required: false)
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("scripts", required: false)
 </body>
 </html>

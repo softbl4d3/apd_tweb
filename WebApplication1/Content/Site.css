@@ -3,16 +3,110 @@
     padding-bottom: 20px;
 }
 
-/* Set padding to keep content from hitting the edges */
+
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
+
 input,
 select,
 textarea {
     max-width: 280px;
+}
+
+
+#mainHeader {
+    height: 60px;
+    z-index: 1030; 
+    
+}
+
+
+body {
+    padding-top: 60px; 
+    
+    padding-bottom: 20px;
+}
+
+
+:root {
+    --header-height: 56px; 
+    --sidebar-width: 230px; 
+}
+
+
+body {
+    padding-top: var(--header-height); 
+    background-color: #f8f9fa; 
+}
+
+
+#pageHeader {
+    height: var(--header-height);
+    z-index: 1030; 
+}
+
+.site-title { 
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem; 
+    transition: transform 0.3s ease;
+}
+
+    .site-title:hover {
+        transform: scale(1.02);
+    }
+
+
+#sidebar {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: var(--sidebar-width); 
+    height: 100vh; 
+    padding-top: var(--header-height); 
+    background-color: #ffffff; 
+    border-right: 1px solid #dee2e6; 
+    z-index: 1020; 
+    box-sizing: border-box; 
+}
+
+
+.sidebar-sticky {
+    height: 100%; 
+    overflow-x: hidden; 
+    overflow-y: auto; 
+}
+
+
+.sidebar-heading {
+    font-size: 1.3rem;
+    text-transform: uppercase;
+}
+
+
+#sidebar .nav-link {
+    font-weight: 500;
+    color: #343a40; 
+    padding: 0.5rem 0; 
+    font-size: 0.9rem;
+}
+
+    #sidebar .nav-link:hover,
+    #sidebar .nav-link.active { 
+        color: #0d6efd; 
+    }
+
+
+.main-content {
+    margin-left: var(--sidebar-width); 
+    padding: 1.5rem; 
+}
+
+.navbar-brand:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
 }
 

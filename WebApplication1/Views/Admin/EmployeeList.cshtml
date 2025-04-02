@@ -29,8 +29,8 @@
                 <td>
                     <!-- Пример ссылок на редактирование и удаление.
                          Реализация действий "EditEmployee" и "DeleteEmployee" зависит от вашей логики. -->
-                    @Html.ActionLink("Редактировать", "EditEmployee", new { id = employee.Id }, null) |
-                    @Html.ActionLink("Удалить", "DeleteEmployee", new { id = employee.Id }, null)
+                    @Html.ActionLink("Редактировать", "EditEmployee", new { id = employee.Id }, new { @class = "btn btn-sm btn-warning" }) 
+                    @Html.ActionLink("Удалить", "DeleteEmployee", new { id = employee.Id }, new { @class = "btn btn-sm btn-danger" })
                 </td>
             </tr>
         }

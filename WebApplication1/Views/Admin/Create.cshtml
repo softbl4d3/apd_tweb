@@ -11,7 +11,7 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         @Html.LabelFor(model => model.Name)
         @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.Name)
