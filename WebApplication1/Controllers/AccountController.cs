@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using eUseControl.Domain.Entities.DTO;
 
 namespace eUseControl.Web.Controllers
 {
@@ -19,11 +20,11 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(User model)
+        public ActionResult Login(UserDTO model)
         {
             if (ModelState.IsValid)
             {
-                switch (model.Role)
+                switch (model.UserName)
                 {
                     case "Admin":
                         return RedirectToAction("Admin", "Dashboard");
@@ -35,7 +36,8 @@ namespace eUseControl.Web.Controllers
                         ModelState.AddModelError("", "Неверная роль или пароль");
                         return View(model);
                 }
-            }
+            } 
+            // Add a return statement for when ModelState is not valid
             return View(model);
         }
     }

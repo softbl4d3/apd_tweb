@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
+using eUseControl.Domain.Enums;
 
-namespace eUseControl.Web.Models
+namespace eUseControl.Domain.Entities.DTO
 {
-    public class EmployeeRegistrationViewModel
+    public class EmployeeRegistrationDTO
     {
         [Required]
         [Display(Name = "Логин")]
@@ -19,7 +19,7 @@ namespace eUseControl.Web.Models
 
         [Required]
         [Display(Name = "Роль")]
-        public string Role { get; set; }
+        public URole Role { get; set; }
 
     }
 }

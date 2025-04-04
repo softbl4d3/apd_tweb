@@ -1,4 +1,5 @@
-﻿@model eUseControl.Web.Models.EmployeeRegistrationViewModel
+﻿
+@model eUseControl.Domain.Entities.User.UserDbTable
 
 @{
     ViewBag.Title = "Регистрация сотрудника";
@@ -28,8 +29,9 @@
             new SelectList(
                 new[] 
                 {
-                    new { Value = "Waiter", Text = "Официант" },
-                    new { Value = "Chef", Text = "Повар" }
+                    new { Value = eUseControl.Domain.Enums.URole.Waiter, Text = "Официант" },
+                    new { Value = eUseControl.Domain.Enums.URole.Chef, Text = "Повар" },
+                    new {Value = eUseControl.Domain.Enums.URole.Admin, Text = "Admin"}
                 },
                 "Value", "Text"),
             "Выберите роль", new { @class = "form-control" })

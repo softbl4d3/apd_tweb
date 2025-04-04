@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
-namespace eUseControl.Web.DTO
+
+namespace eUseControl.Domain.Entities.DTO
 {
-    public class AdminDashboard
+    public class AdminDTO
     {
         public List<Table> Tables { get; set; }
         public List<Order> CurrentOrders { get; set; }

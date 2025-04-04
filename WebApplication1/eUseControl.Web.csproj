@@ -290,17 +290,9 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChefController.cs" />
     <Compile Include="Controllers\WaiterController.cs" />
-    <Compile Include="DTO\AdminDashboard.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\BaseDbItem.cs" />
-    <Compile Include="Models\Dish.cs" />
-    <Compile Include="Models\Order.cs" />
-    <Compile Include="Models\OrderItem.cs" />
-    <Compile Include="Models\Table.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\EmployeeRegistrationViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

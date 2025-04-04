@@ -10,5 +10,7 @@ namespace eUseControl.BusinessLogic
 {
     public class SessionBL : UserApi, ISession
     {
+        
+
     }
 }

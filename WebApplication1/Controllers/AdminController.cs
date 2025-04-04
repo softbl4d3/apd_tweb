@@ -3,14 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using eUseControl.Web.DTO;
+using eUseControl.Domain.Entities.DTO;
 using eUseControl.Web.Models;
+using eUseControl.Domain.Enums;
+using eUseControl.BusinessLogic.Interfaces;
+using eUseControl.BusinessLogic;
 
 namespace eUseControl.Web.Controllers
 {
-    //[Authorize(Roles= "Admin")]
     public class AdminController : Controller
     {
+        private readonly ISession _session;
+        public AdminController()
+        {
+            var bl = new eUseControl.BusinessLogic.BusinessLogic();
+            _session = bl.GetSessionBL();
+        }
         // GET: /Admin/RegisterEmployee
         public ActionResult RegisterEmployee()
         {
@@ -20,21 +28,17 @@ namespace eUseControl.Web.Controllers
         // POST: /Admin/RegisterEmployee
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RegisterEmployee(EmployeeRegistrationViewModel model)
+        public ActionResult RegisterEmployee(EmployeeRegistrationDTO model)
         {
             if (ModelState.IsValid)
             {
-                // Здесь нужно реализовать сохранение сотрудника в базу данных.
-                // Например, с использованием Entity Framework:
-                // var employee = new Employee {
-                //     UserName = model.UserName,
-                //     Password = HashPassword(model.Password), // Не забудьте хэшировать пароль!
-                //     Role = model.Role
-                // };
-                // db.Employees.Add(employee);
-                // db.SaveChanges();
-
-                // В зависимости от архитектуры можно перенаправить на список сотрудников или другую страницу.
+                UserDTO user = new UserDTO
+                {
+                    UserName = model.UserName,
+                    Password = model.Password,
+                    Role = (URole)model.Role
+                };
+                _session.RegisterEmpoyee(user);
                 return RedirectToAction("EmployeeList");
             }
 
@@ -45,16 +49,15 @@ namespace eUseControl.Web.Controllers
         // Пример метода для вывода списка сотрудников
         public ActionResult EmployeeList()
         {
-            // Допустим, вы используете Entity Framework и у вас есть DbSet<Employee> Employees
-            // в вашем контексте данных. Примерно так:
+            // Допустим, в Entity Framework есть DbSet<Employee> Employees
             // var employees = db.Employees.ToList();
 
-            // Для наглядности пока сделаем заглушку (Fake):
-            var employees = new List<User>
+            // Для наглядности пока сделаем заглушку:
+            var employees = new List<UserDTO>
     {
-        new User { UserName = "admin", Role = "Admin" },
-        new User { UserName = "ivan", Role = "Waiter" },
-        new User { UserName = "olga", Role = "Chef" }
+        new UserDTO { UserName = "admin", Role = URole.Admin },
+        new UserDTO { UserName = "ivan", Role = URole.Waiter},
+        new UserDTO { UserName = "olga", Role = URole.Chef }
     };
 
             return View(employees);
@@ -63,7 +66,7 @@ namespace eUseControl.Web.Controllers
         public ActionResult Dashboard()
         {
 
-            var model = new AdminDashboard
+            var model = new AdminDTO
             {
                 Tables = GetMockTables(),
                 CurrentOrders = GetMockOrders()

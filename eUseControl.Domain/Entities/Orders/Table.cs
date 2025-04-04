@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using TWeb48.Models;
-
+using eUseControl.Domain.Entities;
 namespace eUseControl.Web.Models
 {
     public class Table : BaseDbItem
