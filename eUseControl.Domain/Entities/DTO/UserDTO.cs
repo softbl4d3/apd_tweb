@@ -14,4 +14,12 @@ namespace eUseControl.Domain.Entities.DTO
 
         public URole Role { get; set; }
     }
+
+    public class EmpDTO
+    {
+        public string UserName { get; set; }
+
+        public URole Role { get; set; }
+
+    }
 }

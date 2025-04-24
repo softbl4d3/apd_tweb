@@ -1,5 +1,5 @@
 ﻿using eUseControl.Domain.Entities.DTO;
-using eUseControl.Domain.Entities.RespStatus;
+using eUseControl.Domain.Entities.Resps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,9 @@ namespace eUseControl.BusinessLogic.Interfaces
 {
     public interface ISession
     {
-        RespUserActionStatus RegisterEmpoyee(UserDTO data);
+        RegEmpResp RegisterEmployee(UserDTO data);
+
+        List<EmpDTO> GetAllEmployee();
         bool Login(UserDTO data);
     }
 }

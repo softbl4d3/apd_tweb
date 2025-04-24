@@ -8,8 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
+
 namespace eUseControl.Domain.Entities.User
 {
+
+
     public class UserDbTable : BaseDbItem
     {
         [Required]

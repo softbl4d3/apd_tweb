@@ -8,6 +8,7 @@ using eUseControl.Web.Models;
 using eUseControl.Domain.Enums;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.BusinessLogic;
+using System.Drawing.Printing;
 
 namespace eUseControl.Web.Controllers
 {
@@ -28,7 +29,7 @@ namespace eUseControl.Web.Controllers
         // POST: /Admin/RegisterEmployee
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RegisterEmployee(EmployeeRegistrationDTO model)
+        public ActionResult RegisterEmployee(EmpRegViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -38,28 +39,31 @@ namespace eUseControl.Web.Controllers
                     Password = model.Password,
                     Role = (URole)model.Role
                 };
-                _session.RegisterEmpoyee(user);
-                return RedirectToAction("EmployeeList");
+                var responce = _session.RegisterEmployee(user);
+                if (responce.Status == true)
+                {
+                    return RedirectToAction("EmployeeList");
+                }
+                else
+                {
+                    return RedirectToAction("RegisterEmployee");
+                }
             }
 
-            // Если есть ошибки валидации – вернуть представление с сообщениями
-            return View(model);
+                // Если есть ошибки валидации – вернуть представление с сообщениями
+                return View(model);
         }
 
         // Пример метода для вывода списка сотрудников
         public ActionResult EmployeeList()
         {
-            // Допустим, в Entity Framework есть DbSet<Employee> Employees
-            // var employees = db.Employees.ToList();
+            var employeesDTO = _session.GetAllEmployee(); // List<UserDTO>
 
-            // Для наглядности пока сделаем заглушку:
-            var employees = new List<UserDTO>
-    {
-        new UserDTO { UserName = "admin", Role = URole.Admin },
-        new UserDTO { UserName = "ivan", Role = URole.Waiter},
-        new UserDTO { UserName = "olga", Role = URole.Chef }
-    };
-
+            var employees = employeesDTO.Select(user => new EmployeeViewModel
+            {
+                UserName = user.UserName,
+                Role = user.Role
+            }).ToList();
             return View(employees);
         }
 
