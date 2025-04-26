@@ -11,7 +11,7 @@ namespace eUseControl.BusinessLogic
     public class BusinessLogic
     {
 
-        public ISession GetSessionBL()
+        public SessionBL GetSessionBL()
         {
             return new SessionBL();
         }

@@ -54,9 +54,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic.cs" />
+    <Compile Include="Core\AdminApi.cs" />
+    <Compile Include="Core\ChefApi.cs" />
     <Compile Include="Core\UserApi.cs" />
+    <Compile Include="Core\WaiterApi.cs" />
+    <Compile Include="DBModel\OrderContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
-    <Compile Include="Interfaces\ISession.cs" />
+    <Compile Include="Interfaces\IAdmin.cs" />
+    <Compile Include="Interfaces\IUser.cs" />
+    <Compile Include="Migrations\OrderMigrations\202504261231054_InitialCreate.cs" />
+    <Compile Include="Migrations\OrderMigrations\202504261231054_InitialCreate.Designer.cs">
+      <DependentUpon>202504261231054_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\OrderMigrations\202504261718496_test.cs" />
+    <Compile Include="Migrations\OrderMigrations\202504261718496_test.Designer.cs">
+      <DependentUpon>202504261718496_test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\OrderMigrations\Configuration.cs" />
+    <Compile Include="Migrations\UserMigrations\202504261326000_InitialUserCreate.cs" />
+    <Compile Include="Migrations\UserMigrations\202504261326000_InitialUserCreate.Designer.cs">
+      <DependentUpon>202504261326000_InitialUserCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\UserMigrations\Configuration.cs" />
     <Compile Include="SessionBL.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +140,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DBModel\seed\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\OrderMigrations\202504261231054_InitialCreate.resx">
+      <DependentUpon>202504261231054_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\OrderMigrations\202504261718496_test.resx">
+      <DependentUpon>202504261718496_test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\UserMigrations\202504261326000_InitialUserCreate.resx">
+      <DependentUpon>202504261326000_InitialUserCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

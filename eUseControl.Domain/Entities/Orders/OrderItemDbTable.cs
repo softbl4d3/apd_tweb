@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using eUseControl.Domain.Entities;
+using eUseControl.Domain.Enums;
 
 
-namespace eUseControl.Web.Models
+namespace eUseControl.Domain.Entities.Orders
 {
-    public class OrderItem : BaseDbItem
+    [Table("OrderItems")]
+
+    public class OrderItemDbTable : BaseDbItem
     {
         public int OrderId { get; set; }
         public int DishId { get; set; }
         public int Amount { get; set; }
         public decimal Price { get; set; }
         public string Note { get; set; }
-        public string Status { get; set; } 
-        public virtual Order Order { get; set; }
-        public virtual Dish Dish { get; set; }
+        public DStatus Status { get; set; } 
     }
 }

@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 namespace eUseControl.Domain.Entities.User
 {
 
-
+    [Table("Users")]
     public class UserDbTable : BaseDbItem
     {
         [Required]

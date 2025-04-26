@@ -8,11 +8,9 @@ using System.Threading.Tasks;
 
 namespace eUseControl.BusinessLogic.Interfaces
 {
-    public interface ISession
+    public interface IUser
     {
         RegEmpResp RegisterEmployee(UserDTO data);
 
-        List<EmpDTO> GetAllEmployee();
-        bool Login(UserDTO data);
     }
 }

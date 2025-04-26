@@ -1,0 +1,35 @@
+﻿@model eUseControl.Web.Models.IngridientViewModel
+
+@{
+    ViewBag.Title = "Добавление ингредиента";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Добавить новый ингредиент</h2>
+
+    @using (Html.BeginForm("IngridientAdd", "Admin", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, "Название ингредиента")
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Amount, "Количество")
+            @Html.TextBoxFor(model => model.Amount, new { @class = "form-control", type = "number" })
+            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status, "Статус")
+            @Html.EnumDropDownListFor(model => model.Status, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-primary" formmethod="post">Добавить ингредиент</button>
+    }
+</div>
