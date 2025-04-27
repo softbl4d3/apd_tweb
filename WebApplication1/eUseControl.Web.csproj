@@ -389,8 +389,9 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Admin\AdminMenu.cshtml" />
     <Content Include="Views\Admin\IngridientAdd.cshtml" />
+    <Content Include="Views\Admin\Ingredients.cshtml" />
+    <Content Include="Views\Admin\EditIngredient.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

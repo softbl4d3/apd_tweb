@@ -16,8 +16,14 @@ namespace eUseControl.BusinessLogic.Interfaces
 
     public interface ICrudIngredientAdmin
     {
-        AdminResp AddIngridient(IngridientDTO ingrid);
-        List<IngridientDTO> GetAllIngridients();
+        AdminResp AddIngredient(IngridientDTO ingrid);
+        AdminResp EditIngredient(IngridientDTO ingrid);
+        AdminResp DeleteIngredient(int Id);
+
+        List<IngridientDTO> GetAllIngredients();
+
+
+        IngridientDTO GetIngredientById(int ingId);
 
 
     }
@@ -30,7 +36,9 @@ namespace eUseControl.BusinessLogic.Interfaces
     public interface ICrudDishAdmin
     {
         AdminResp AddDish(DishDTO dish);
+        AdminResp DeleteDish(int Id);
 
+        DishDTO GetDishById(int Id);
         List<DishDTO> GetAllDishes();
 
     }

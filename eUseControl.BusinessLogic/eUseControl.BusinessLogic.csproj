@@ -76,6 +76,7 @@
       <DependentUpon>202504261326000_InitialUserCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\UserMigrations\Configuration.cs" />
+    <Compile Include="Services\DishService.cs" />
     <Compile Include="SessionBL.cs" />
   </ItemGroup>
   <ItemGroup>

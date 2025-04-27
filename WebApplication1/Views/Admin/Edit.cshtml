@@ -36,6 +36,19 @@
                 @Html.CheckBoxFor(model => model.IsAvailable, new { @class = "form-check-input" })
             </div>
         </div>
+        <h4>Ингредиенты:</h4>
+        <ul>
+            @for (int i = 0; i < Model.Ingredients.Count; i++)
+            {
+                <li>
+                    @Html.CheckBoxFor(model => model.Ingredients[i].Selected)
+                    @Html.HiddenFor(model => model.Ingredients[i].Name)
+                    @Html.HiddenFor(model => model.Ingredients[i].Amount)
+                    @Html.HiddenFor(model => model.Ingredients[i].Status)
+                    @Model.Ingredients[i].Name (@Model.Ingredients[i].Amount) - @Model.Ingredients[i].Status
+                </li>
+            }
+        </ul>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

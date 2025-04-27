@@ -10,6 +10,7 @@ using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.BusinessLogic;
 using System.Drawing.Printing;
 using eUseControl.Domain.Entities.Orders;
+using System.Net.NetworkInformation;
 
 namespace eUseControl.Web.Controllers
 {
@@ -89,6 +90,22 @@ namespace eUseControl.Web.Controllers
         };
         }
 
+        // -------------------------------- Ingredients  ----------------------------------
+        public ActionResult Ingredients()
+        {
+            var ingrDTO = _session.Admin.GetAllIngredients();
+
+            var igredients = ingrDTO.Select(ing => new IngridientViewModel
+            {
+                Id = ing.Id,
+                Name = ing.Name,
+                Amount = ing.Amount,
+                Status = ing.Status,
+
+            }).ToList();
+
+            return View(igredients);
+        }
         
         public ActionResult IngridientAdd()
         {
@@ -106,10 +123,10 @@ namespace eUseControl.Web.Controllers
                     Amount = Ingrid.Amount,
                     Status = (IngridStaus)Ingrid.Status
                 };
-                var responce = _session.Admin.AddIngridient(Ignridient);
+                var responce = _session.Admin.AddIngredient(Ignridient);
                 if (responce.Status == true)
                 {
-                    return RedirectToAction("Menu");
+                    return RedirectToAction("Ingredients");
                 }
                 else
                 {
@@ -118,6 +135,57 @@ namespace eUseControl.Web.Controllers
             }
             return View();
         }
+        [HttpGet]
+        public ActionResult EditIngredient(int id)
+        {
+            IngridientDTO ing = _session.Admin.GetIngredientById(id);
+            var model = new IngridientViewModel
+            {
+                Id = ing.Id,
+                Name = ing.Name,
+                Amount = ing.Amount,
+                Status = ing.Status
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult EditIngredient(IngridientViewModel ing)
+        {
+            IngridientDTO ingDto = new IngridientDTO
+            {
+                Id = ing.Id,
+                Name = ing.Name,
+                Amount = ing.Amount,
+                Status = ing.Status
+            };
+            var resp = _session.Admin.EditIngredient(ingDto);
+
+            if (resp.Status == true)
+            {
+                return RedirectToAction("Ingredients");
+            }
+            else
+            {
+                return View(ing);
+            }
+        }
+
+        public ActionResult DeleteIngredient (int id)
+        {
+            var resp = _session.Admin.DeleteIngredient(id);
+
+            if (resp.Status == true)
+            {
+                return RedirectToAction("Ingredients");
+            }
+            else
+            {
+                return RedirectToAction("Ingredients");
+            }
+        }
+
+
+        // -------------------------------- Menu  ----------------------------------
         public ActionResult Menu()
         {
             var dishesDTO = _session.Admin.GetAllDishes();
@@ -139,7 +207,7 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            var ingredientsDto = _session.Admin.GetAllIngridients();
+            var ingredientsDto = _session.Admin.GetAllIngredients();
 
             var model = new DishViewModel
             {
@@ -191,12 +259,31 @@ namespace eUseControl.Web.Controllers
             return View(model); // Если ошибка, вернуть модель обратно
         }
 
-        // GET: Admin/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    var dish = _dishes.FirstOrDefault(d => d.Id == id);
-        //    return View(dish);
-        //}
+
+        public ActionResult Edit(int id)
+        {
+            var dishDto = _session.Admin.GetDishById(id);
+            var allIngredients = _session.Admin.GetAllIngredients();
+
+            DishViewModel dish = new DishViewModel
+            {
+                Id = dishDto.Id,
+                Name = dishDto.Name,
+                Description = dishDto.Description,
+                Category = dishDto.Category,
+                Price = dishDto.Price,
+                IsAvailable = dishDto.IsAvailable,
+                Ingredients = allIngredients.Select(ingredient => new IngredientSelectionViewModel
+                {
+                    Name = ingredient.Name,
+                    Amount = dishDto.Ingredients.FirstOrDefault(x => x.Id == ingredient.Id)?.Amount ?? 0,
+                    Status = ingredient.Status,
+                    Selected = dishDto.Ingredients.Any(x => x.Id == ingredient.Id)
+                }).ToList()
+            };
+
+            return View(dish);
+        }
 
         // POST: Admin/Edit/5
         //[HttpPost]
@@ -222,13 +309,22 @@ namespace eUseControl.Web.Controllers
         //    return RedirectToAction("Menu");
         //}
 
-        //// GET: Admin/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    var dish = _dishes.First(d => d.Id == id);
-        //    _dishes.Remove(dish);
-        //    return RedirectToAction("Menu");
-        //}
+        // GET: Admin/Delete/5
+        public ActionResult Delete(int id)
+        {
+            
+            var resp = _session.Admin.DeleteDish(id);
+
+            if (resp.Status == true)
+            {
+                return RedirectToAction("Menu");
+            }
+            else
+            {
+                return RedirectToAction("Menu");
+            }
+        
+        }
 
         //// POST: Admin/Delete/id
         //[HttpPost, ActionName("Delete")]

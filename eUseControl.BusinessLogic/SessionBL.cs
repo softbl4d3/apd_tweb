@@ -34,13 +34,20 @@ namespace eUseControl.BusinessLogic
         {
             private readonly AdminApi _api;
             public AdminWrapper(AdminApi api) => _api = api;
+            // -- Ingredients -- 
+            public List<IngridientDTO> GetAllIngredients() => _api.GetAllIngredientsAction();
+            public AdminResp AddIngredient(IngridientDTO ingrid) => _api.AddIngredientAction(ingrid);
 
-            public List<IngridientDTO> GetAllIngridients() => _api.GetAllIngridientsAction();
+            public AdminResp EditIngredient(IngridientDTO ingrid) => _api.EditIngredientAction(ingrid);
+            public IngridientDTO GetIngredientById(int Id) => _api.GetIngredietByIdAction(Id);
+            public AdminResp DeleteIngredient(int Id) => _api.DeleteIngredientAction(Id);
 
+            // -- Dishes --
             public List<DishDTO> GetAllDishes() => _api.GetAllDishesAction();
             public AdminResp AddDish(DishDTO dish) => _api.AddDishAction(dish);
-            public AdminResp AddIngridient(IngridientDTO ingrid) => _api.AddIngridientAction(ingrid);
             public List<EmpDTO> GetAllEmployee() => _api.GetAllEmployeeAction();
+            public DishDTO GetDishById(int Id) => _api.GetDishByIdAction(Id);
+            public AdminResp DeleteDish(int Id) => _api.DeleteDishAction(Id);
         }
     }
 }

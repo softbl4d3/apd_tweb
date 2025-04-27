@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using eUseControl.BusinessLogic.DBModel;
+using eUseControl.BusinessLogic.Services;
 using eUseControl.Domain.Entities.DTO;
 using eUseControl.Domain.Entities.Orders;
 using eUseControl.Domain.Entities.Resps;
@@ -15,6 +19,7 @@ namespace eUseControl.BusinessLogic.Core
 {
     public class AdminApi
     {
+        // ----------------------Employee ----------------------------------------------------------------------------------------------------------
         public List<EmpDTO> GetAllEmployeeAction()
         {
             List<EmpDTO> employeesDTO;
@@ -40,7 +45,9 @@ namespace eUseControl.BusinessLogic.Core
 
             return employeesDTO;
         }
-        public AdminResp AddIngridientAction(IngridientDTO ing)
+        // ----------------------Ingredient ----------------------------------------------------------------------------------------------------------
+
+        public AdminResp AddIngredientAction(IngridientDTO ing)
         {
             IngridientDbTable ingridient = new IngridientDbTable
             {
@@ -59,7 +66,7 @@ namespace eUseControl.BusinessLogic.Core
                     existingingridient = context.Ingridients.FirstOrDefault(i => i.Name == ingridient.Name);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new AdminResp
                 {
@@ -91,7 +98,148 @@ namespace eUseControl.BusinessLogic.Core
             }
 
         }
-        public List<IngridientDTO> GetAllIngridientsAction()
+
+        public AdminResp EditIngredientAction(IngridientDTO ing)
+        {
+            IngridientDbTable existingIng;
+            bool beforeStatus;
+
+            try
+            {
+                using (var context = new OrderContext())
+                {
+                    existingIng = context.Ingridients.FirstOrDefault(i => i.Id == ing.Id);
+
+                    if (existingIng.Status == IngridStaus.Unavailable) { beforeStatus = false; }
+                    else { beforeStatus = true; }
+
+
+                    if (existingIng == null)
+                    {
+                        return new AdminResp { Status = false, Message = "item no exist" };
+                    }
+
+                    existingIng.Name = ing.Name;
+                    existingIng.Amount = ing.Amount;
+                    existingIng.Status = ing.Status;
+                    existingIng.UpdatedAt = DateTime.Now;
+
+
+                    context.Ingridients.AddOrUpdate(existingIng);
+                    context.SaveChanges();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return new AdminResp
+                {
+                    Status = false,
+                    Message = $"something went wrong, message = {ex.Message}"
+                };
+            }
+
+
+            var _dishService = new DishService();
+            if (_dishService.ShouldUpdateDish(beforeStatus, existingIng.Status))
+            {
+                using (var context = new OrderContext())
+                {
+
+                    List<DishDbTable> dishes = context.Dishes
+                        .Include(d => d.Ingredients)
+                        .Where(d => d.Ingredients.Any(i => i.Id == existingIng.Id))
+                        .ToList();
+
+                    foreach (DishDbTable dish in dishes)
+                    {
+                        dish.IsAvailable = _dishService.CheckDishAvailability(dish);
+                    }
+                    context.SaveChanges();
+                }
+            }
+
+
+
+            return new AdminResp { Status = true };
+
+        }
+
+        public AdminResp DeleteIngredientAction(int Id)
+        {
+            try
+            {
+                IngridientDbTable ExistingIng;
+                using (var context = new OrderContext())
+                {
+                    ExistingIng = context.Ingridients.FirstOrDefault(i => i.Id == Id);
+
+                    if (ExistingIng != null)
+                    {
+
+                        context.Ingridients.Remove(ExistingIng);
+                        context.SaveChanges();
+
+                        return new AdminResp
+                        {
+                            Status = true
+                        };
+                    }
+                    else
+                    {
+                        return new AdminResp
+                        {
+                            Status = false,
+                            Message = "item is no exist"
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new AdminResp
+                {
+                    Status = false,
+                    Message = $"something went wrong, message = {ex.Message}"
+                };
+            }
+
+
+            return new AdminResp
+            {
+                Status = true
+            };
+        }
+        public IngridientDTO GetIngredietByIdAction(int Id)
+        {
+            try
+            {
+                IngridientDbTable ingDb;
+                using (var context = new OrderContext())
+                {
+                    ingDb = context.Ingridients.FirstOrDefault(i => i.Id == Id);
+                }
+                if (ingDb != null)
+                {
+                    IngridientDTO ingDto = new IngridientDTO
+                    {
+                        Id = ingDb.Id,
+                        Name = ingDb.Name,
+                        Amount = ingDb.Amount,
+                        Status = ingDb.Status,
+
+                    };
+                    return ingDto;
+                }
+                else { return new IngridientDTO(); }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error : {ex.Message}");
+                return new IngridientDTO();
+            }
+        }
+        public List<IngridientDTO> GetAllIngredientsAction()
         {
             List<IngridientDbTable> ing;
             try
@@ -110,6 +258,7 @@ namespace eUseControl.BusinessLogic.Core
             // Преобразование списка
             var ingredientsDTO = ing.Select(x => new IngridientDTO
             {
+                Id = x.Id,
                 Name = x.Name,
                 Amount = x.Amount,
                 Status = (IngridStaus)x.Status
@@ -117,6 +266,7 @@ namespace eUseControl.BusinessLogic.Core
 
             return ingredientsDTO;
         }
+        // ----------------------Dish ----------------------------------------------------------------------------------------------------------
 
         public AdminResp AddDishAction(DishDTO dish)
         {
@@ -212,14 +362,98 @@ namespace eUseControl.BusinessLogic.Core
                 }).ToList();
                 return Dishes;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.Write( $"Имя: {ex.Message}");
-                
+                Console.Write($"Имя: {ex.Message}");
+
                 return new List<DishDTO>();
             }
-            
-        }
 
+        }
+        public DishDTO GetDishByIdAction(int Id)
+        {
+
+            try
+            {
+                DishDbTable dishDb;
+                using (var context = new OrderContext())
+                {
+                    dishDb = context.Dishes
+                        .Include(d => d.Ingredients)
+                        .FirstOrDefault(i => i.Id == Id);
+                }
+                if (dishDb != null)
+                {
+                    DishDTO dishDto = new DishDTO
+                    {
+                        Id = dishDb.Id,
+                        Name = dishDb.Name,
+                        Description = dishDb.Description,
+                        Category = dishDb.Category,
+                        Price = dishDb.Price,
+                        IsAvailable = dishDb.IsAvailable,
+                        Ingredients = dishDb.Ingredients != null
+                            ? dishDb.Ingredients.Select(x => new IngridientDTO
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Amount = x.Amount,
+                                Status = x.Status,
+                            }).ToList()
+                            : new List<IngridientDTO>(),
+
+                    };
+
+                    return dishDto;
+                }
+                else { return new DishDTO(); }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error : {ex.Message}");
+                return new DishDTO();
+            }
+
+        }
+        public AdminResp DeleteDishAction(int Id)
+        {
+            try
+            {
+                DishDbTable ExistingDish;
+                using (var context = new OrderContext())
+                {
+                    ExistingDish = context.Dishes.FirstOrDefault(i => i.Id == Id);
+
+                    if (ExistingDish != null)
+                    {
+
+                        context.Dishes.Remove(ExistingDish);
+                        context.SaveChanges();
+
+                        return new AdminResp
+                        {
+                            Status = true
+                        };
+                    }
+                    else
+                    {
+                        return new AdminResp
+                        {
+                            Status = false,
+                            Message = "item is no exist"
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new AdminResp
+                {
+                    Status = false,
+                    Message = $"something went wrong, message = {ex.Message}"
+                };
+            }
+
+        }
     }
 }

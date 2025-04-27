@@ -9,6 +9,7 @@ namespace eUseControl.Domain.Entities.DTO
 {
     public class IngridientDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public int Amount { get; set; }
         public IngridStaus Status { get; set; }
