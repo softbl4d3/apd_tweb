@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using eUseControl.Domain.Entities.Orders;
 using eUseControl.Domain.Entities.User;
-using eUseControl.Web.Models;
 
 namespace eUseControl.BusinessLogic.DBModel
 {

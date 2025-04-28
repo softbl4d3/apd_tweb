@@ -11,6 +11,7 @@ namespace eUseControl.BusinessLogic.Interfaces
     public interface IUser
     {
         RegEmpResp RegisterEmployee(UserDTO data);
+        List<EmpDTO> GetAllEmployee();
 
     }
 }

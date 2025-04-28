@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\BaseDbItem.cs" />
-    <Compile Include="Entities\DTO\AdminDTO.cs" />
     <Compile Include="Entities\DTO\ChefDTO.cs" />
     <Compile Include="Entities\DTO\DishDTO.cs" />
     <Compile Include="Entities\DTO\IngridientDTO.cs" />

@@ -72,22 +72,30 @@ namespace eUseControl.BusinessLogic.Core
             }
         }
 
-        public bool Login(UserDTO data)
+        public List<EmpDTO> GetAllEmployeeAction()
         {
+            List<EmpDTO> employeesDTO;
+
             using (var context = new UserContext())
             {
-                var user = context.Users.FirstOrDefault(u => u.UserName == data.UserName && u.Password == data.Password);
-                if (user != null)
-                {
-                    new UserDTO
+                var employees = context.Users
+                    .Select(u => new
                     {
-                        UserName = user.UserName,
-                        Password = user.Password,
-                        Role = user.Role
-                    };
-                }
-                return false;
+                        u.UserName,
+                        u.Role
+                    })
+                    .ToList();
+
+                employeesDTO = employees
+                    .Select(e => new EmpDTO
+                    {
+                        UserName = e.UserName,
+                        Role = e.Role
+                    })
+                    .ToList();
             }
+
+            return employeesDTO;
         }
     }
 }

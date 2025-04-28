@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using eUseControl.Domain.Entities;
 using eUseControl.Domain.Enums;
-namespace eUseControl.Web.Models
+namespace eUseControl.Domain.Entities.Orders
 {
     [Table("Tables")]
 
@@ -12,9 +12,8 @@ namespace eUseControl.Web.Models
     {
         public int TableNumber { get; set; }
         public int Capacity { get; set; }
-        public TStatus Status { get; set; } // "Free", "Occupied", "Reserved"
+        public TStatus Status { get; set; } 
         public TZone Zone { get; set; }
-        public DateTime? ReservationTime { get; set; }
     }
 
 

@@ -1,5 +1,5 @@
-﻿@model eUseControl.Domain.Entities.DTO.AdminDTO
-
+﻿@model List<eUseControl.Web.Models.TableViewModel>
+@using eUseControl.Domain.Enums
 @{
     ViewBag.Title = "Администратор - Текущая посадка и заказы";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,7 +10,7 @@
     <h2>Текущая рассадка столиков</h2>
 
     <div class="row">
-        @foreach (var table in Model.Tables)
+        @foreach (var table in Model)
         {
             <div class="col-md-4 mb-4">
                 <div class="card @GetTableStatusClass(table.Status)">
@@ -21,12 +21,7 @@
                             Зона: @table.Zone<br>
                             Статус: @table.Status
                         </p>
-                        @if (table.ReservationTime.HasValue)
-                        {
-                            <small class="text-muted">
-                                Бронь до: @table.ReservationTime.Value.ToString("g")
-                            </small>
-                        }
+                        
                     </div>
                 </div>
             </div>
@@ -35,7 +30,7 @@
 
     <h2>Текущие заказы</h2>
 
-    <table class="table table-hover">
+    @*<table class="table table-hover">
         <thead class="thead-dark">
             <tr>
                 <th>№ заказа</th>
@@ -61,30 +56,31 @@
                 </tr>
             }
         </tbody>
-    </table>
+    </table>*@
 </div>
 
 @functions {
-    string GetTableStatusClass(string status)
+    string GetTableStatusClass(TStatus status)
+
     {
         return status switch
         {
-            "Occupied" => "border-danger",
-            "Reserved" => "border-warning",
+            TStatus.Occupied => "border-danger",
+            TStatus.Reserved => "border-warning",
             _ => "border-success"
         };
     }
 
-    string GetOrderStatusClass(string status)
-    {
-        return status switch
-        {
-            "New" => "badge-secondary",
-            "InProgress" => "badge-primary",
-            "Ready" => "badge-info",
-            "Completed" => "badge-success",
-            "Cancelled" => "badge-danger",
-            _ => "badge-light"
-        };
-    }
+    //string GetOrderStatusClass(OSta status)
+    //{
+    //    return status switch
+    //    {
+    //        "New" => "badge-secondary",
+    //        "InProgress" => "badge-primary",
+    //        "Ready" => "badge-info",
+    //        "Completed" => "badge-success",
+    //        "Cancelled" => "badge-danger",
+    //        _ => "badge-light"
+    //    };
+    //}
 }

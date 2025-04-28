@@ -54,13 +54,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic.cs" />
-    <Compile Include="Core\AdminApi.cs" />
-    <Compile Include="Core\ChefApi.cs" />
+    <Compile Include="Core\DishApi.cs" />
+    <Compile Include="Core\IngredientApi.cs" />
+    <Compile Include="Core\TableApi.cs" />
     <Compile Include="Core\UserApi.cs" />
-    <Compile Include="Core\WaiterApi.cs" />
     <Compile Include="DBModel\OrderContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
-    <Compile Include="Interfaces\IAdmin.cs" />
+    <Compile Include="Interfaces\IDish.cs" />
+    <Compile Include="Interfaces\IIngredient.cs" />
+    <Compile Include="Interfaces\ITable.cs" />
     <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Migrations\OrderMigrations\202504261231054_InitialCreate.cs" />
     <Compile Include="Migrations\OrderMigrations\202504261231054_InitialCreate.Designer.cs">

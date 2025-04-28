@@ -11,6 +11,7 @@ using eUseControl.BusinessLogic;
 using System.Drawing.Printing;
 using eUseControl.Domain.Entities.Orders;
 using System.Net.NetworkInformation;
+using System.Web.UI.WebControls;
 
 namespace eUseControl.Web.Controllers
 {
@@ -59,7 +60,7 @@ namespace eUseControl.Web.Controllers
         // Пример метода для вывода списка сотрудников
         public ActionResult EmployeeList()
         {
-            var employeesDTO = _session.Admin.GetAllEmployee(); // List<UserDTO>
+            var employeesDTO = _session.User.GetAllEmployee();
 
             var employees = employeesDTO.Select(user => new EmployeeViewModel
             {
@@ -72,28 +73,25 @@ namespace eUseControl.Web.Controllers
         public ActionResult Dashboard()
         {
 
-            var model = new AdminDTO
-            {
-                Tables = GetMockTables(),
-                //CurrentOrders = GetMockOrders()
-            };
+            List<TableDTO> tableDto = _session.Table.GetAllTables();
 
-            return View(model);
+            List<TableViewModel> tables = tableDto.Select(t => new TableViewModel{
+
+            TableNumber = t.TableNumber,
+            Capacity = t.Capacity,
+            Zone = t.Zone,
+            Status = t.Status,
+
+            }).ToList();
+
+            return View(tables);
         }
-        private List<TableDbTable> GetMockTables() // Заглушка для списка столов
-        {
-            return new List<TableDbTable>
-        {
-            new TableDbTable { Id = 1, TableNumber = 42, Capacity = 4, Status = TStatus.Free, Zone = TZone.none },
-            new TableDbTable { Id = 2, TableNumber = 233, Capacity = 2, Status = TStatus.Occupied, Zone = TZone.none },
-            new TableDbTable { Id = 3, TableNumber = 3, Capacity = 6, Status = TStatus.Reserved, Zone = TZone.vip}
-        };
-        }
+
 
         // -------------------------------- Ingredients  ----------------------------------
         public ActionResult Ingredients()
         {
-            var ingrDTO = _session.Admin.GetAllIngredients();
+            var ingrDTO = _session.Ingredient.GetAllIngredients();
 
             var igredients = ingrDTO.Select(ing => new IngridientViewModel
             {
@@ -123,7 +121,7 @@ namespace eUseControl.Web.Controllers
                     Amount = Ingrid.Amount,
                     Status = (IngridStaus)Ingrid.Status
                 };
-                var responce = _session.Admin.AddIngredient(Ignridient);
+                var responce = _session.Ingredient.AddIngredient(Ignridient);
                 if (responce.Status == true)
                 {
                     return RedirectToAction("Ingredients");
@@ -138,7 +136,7 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult EditIngredient(int id)
         {
-            IngridientDTO ing = _session.Admin.GetIngredientById(id);
+            IngridientDTO ing = _session.Ingredient.GetIngredientById(id);
             var model = new IngridientViewModel
             {
                 Id = ing.Id,
@@ -158,7 +156,7 @@ namespace eUseControl.Web.Controllers
                 Amount = ing.Amount,
                 Status = ing.Status
             };
-            var resp = _session.Admin.EditIngredient(ingDto);
+            var resp = _session.Ingredient.EditIngredient(ingDto);
 
             if (resp.Status == true)
             {
@@ -172,7 +170,7 @@ namespace eUseControl.Web.Controllers
 
         public ActionResult DeleteIngredient (int id)
         {
-            var resp = _session.Admin.DeleteIngredient(id);
+            var resp = _session.Ingredient.DeleteIngredient(id);
 
             if (resp.Status == true)
             {
@@ -188,7 +186,7 @@ namespace eUseControl.Web.Controllers
         // -------------------------------- Menu  ----------------------------------
         public ActionResult Menu()
         {
-            var dishesDTO = _session.Admin.GetAllDishes();
+            var dishesDTO = _session.Dish.GetAllDishes();
 
             var dishes = dishesDTO.Select(dish => new DishViewModel
             {
@@ -200,14 +198,14 @@ namespace eUseControl.Web.Controllers
                 IsAvailable = dish.IsAvailable
             }).ToList();
 
-            return View(dishes);
+            return View("~View/Admin/Menu/Create.cshtml",dishes);
         }
 
         // GET: Admin/Create
         [HttpGet]
         public ActionResult Create()
         {
-            var ingredientsDto = _session.Admin.GetAllIngredients();
+            var ingredientsDto = _session.Ingredient.GetAllIngredients();
 
             var model = new DishViewModel
             {
@@ -250,7 +248,7 @@ namespace eUseControl.Web.Controllers
                             .ToList()
                  };
 
-                _session.Admin.AddDish(dishDto);
+                _session.Dish.AddDish(dishDto);
 
                 return RedirectToAction("Menu");
 
@@ -262,8 +260,8 @@ namespace eUseControl.Web.Controllers
 
         public ActionResult Edit(int id)
         {
-            var dishDto = _session.Admin.GetDishById(id);
-            var allIngredients = _session.Admin.GetAllIngredients();
+            var dishDto = _session.Dish.GetDishById(id);
+            var allIngredients = _session.Ingredient.GetAllIngredients();
 
             DishViewModel dish = new DishViewModel
             {
@@ -285,20 +283,32 @@ namespace eUseControl.Web.Controllers
             return View(dish);
         }
 
-        // POST: Admin/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(Dish updatedDish)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var existing = _dishes.First(d => d.Id == updatedDish.Id);
-        //        _dishes.Remove(existing);
-        //        _dishes.Add(updatedDish);
-        //        return RedirectToAction("Menu");
-        //    }
-        //    return View(updatedDish);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(DishViewModel updatedDish)
+        {
+            if (ModelState.IsValid)
+            {
+                DishDTO dishDto = new DishDTO
+                {
+                    Id = updatedDish.Id,
+                    Name = updatedDish.Name,
+                    Description = updatedDish.Description,
+                    Category = updatedDish.Category,
+                    Price = updatedDish.Price,
+                    IsAvailable = updatedDish.IsAvailable,
+                    Ingredients = updatedDish.Ingredients
+                    .Where(i => i.Selected == true)
+                    .Select(i => new IngridientDTO
+                    {
+                        Name = i.Name,
+                        Amount = i.Amount,
+                        Status = i.Status
+                    }).ToList()
+                };
+            }
+            return View(updatedDish);
+        }
 
         // POST: Admin/ToggleStatus/5
         //[HttpPost]
@@ -313,7 +323,7 @@ namespace eUseControl.Web.Controllers
         public ActionResult Delete(int id)
         {
             
-            var resp = _session.Admin.DeleteDish(id);
+            var resp = _session.Dish.DeleteDish(id);
 
             if (resp.Status == true)
             {

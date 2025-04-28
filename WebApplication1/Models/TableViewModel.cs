@@ -5,14 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using eUseControl.Domain.Enums;
 
-namespace eUseControl.Domain.Entities.DTO
+namespace eUseControl.Web.Models
 {
-    public class TableDTO
+    public class TableViewModel
     {
         public int TableNumber { get; set; }
         public int Capacity { get; set; }
         public TStatus Status { get; set; }
         public TZone Zone { get; set; }
-
     }
 }
