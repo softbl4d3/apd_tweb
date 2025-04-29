@@ -56,7 +56,7 @@ namespace eUseControl.BusinessLogic.Core
             TableDbTable tableDb = new TableDbTable
             {
                 TableNumber = tableDto.TableNumber,
-                Status = Domain.Enums.TStatus.Free,
+                Status = tableDto.Status,
                 Capacity = tableDto.Capacity,
                 Zone = tableDto.Zone
 
@@ -66,10 +66,11 @@ namespace eUseControl.BusinessLogic.Core
             try {
                 using (var context = new OrderContext())
                 {
-                    bool existTable = context.Tables.Any(t => t.TableNumber == tableDb.TableNumber);
+                    var existTable = context.Tables.First(t => t.TableNumber == tableDb.TableNumber);
 
-                    if (existTable)
+                    if (existTable != null)
                     {
+                        tableDb.Id = existTable.Id;
                         context.Tables.AddOrUpdate(tableDb);
                         context.SaveChanges();
                     }
@@ -85,7 +86,10 @@ namespace eUseControl.BusinessLogic.Core
                     Message = $"table exist{ex.Message}"
                 };
             }
-            return null;
+            return new AdminResp
+            {
+                Status = true,
+            };
 
         }
         public AdminResp DeleteTable(int Id)

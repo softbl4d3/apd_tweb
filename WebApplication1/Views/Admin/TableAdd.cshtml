@@ -1,0 +1,35 @@
+﻿@model eUseControl.Web.Models.TableViewModel
+
+@{
+    ViewBag.Title = "Добавление столика";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Добавить новый столик</h2>
+
+    @using (Html.BeginForm("TableAdd", "Admin", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TableNumber, "Номер столика")
+            @Html.TextBoxFor(model => model.TableNumber, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.TableNumber, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Capacity, "Количество человек за столиком")
+            @Html.TextBoxFor(model => model.Capacity, new { @class = "form-control", type = "number" })
+            @Html.ValidationMessageFor(model => model.Capacity, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Zone, "Зона")
+            @Html.EnumDropDownListFor(model => model.Zone, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Zone, "", new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-primary" formmethod="post">Добавить столик</button>
+    }
+</div>

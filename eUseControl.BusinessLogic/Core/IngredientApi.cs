@@ -32,7 +32,16 @@ namespace eUseControl.BusinessLogic.Core
                 IngridientDbTable existingingridient;
                 using (var context = new OrderContext())
                 {
-                    existingingridient = context.Ingridients.First(i => i.Name == ingridient.Name);
+                    existingingridient = context.Ingridients.FirstOrDefault(i => i.Name == ingridient.Name);
+
+                    if (existingingridient != null)
+                    {
+                        return new AdminResp
+                        {
+                            Status = false,
+                            Message = $"Ingridient already exists"
+                        };
+                    }
                 }
             }
             catch (Exception ex)
@@ -40,7 +49,7 @@ namespace eUseControl.BusinessLogic.Core
                 return new AdminResp
                 {
                     Status = false,
-                    Message = $"Ingridient already exists, ex = {ex.Message}"
+                    Message = $"error, ex = {ex.Message}"
                 };
             }
             try

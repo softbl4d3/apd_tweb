@@ -72,6 +72,14 @@
     <Compile Include="Migrations\OrderMigrations\202504261718496_test.Designer.cs">
       <DependentUpon>202504261718496_test.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\OrderMigrations\202504290923043_table_rebuild.cs" />
+    <Compile Include="Migrations\OrderMigrations\202504290923043_table_rebuild.Designer.cs">
+      <DependentUpon>202504290923043_table_rebuild.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\OrderMigrations\202504290933193_table_rebuild2.cs" />
+    <Compile Include="Migrations\OrderMigrations\202504290933193_table_rebuild2.Designer.cs">
+      <DependentUpon>202504290933193_table_rebuild2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\OrderMigrations\Configuration.cs" />
     <Compile Include="Migrations\UserMigrations\202504261326000_InitialUserCreate.cs" />
     <Compile Include="Migrations\UserMigrations\202504261326000_InitialUserCreate.Designer.cs">
@@ -150,6 +158,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\OrderMigrations\202504261718496_test.resx">
       <DependentUpon>202504261718496_test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\OrderMigrations\202504290923043_table_rebuild.resx">
+      <DependentUpon>202504290923043_table_rebuild.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\OrderMigrations\202504290933193_table_rebuild2.resx">
+      <DependentUpon>202504290933193_table_rebuild2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\UserMigrations\202504261326000_InitialUserCreate.resx">
       <DependentUpon>202504261326000_InitialUserCreate.cs</DependentUpon>
