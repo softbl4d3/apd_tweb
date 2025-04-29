@@ -20,6 +20,7 @@ namespace eUseControl.BusinessLogic
 
         //--------------------------------------- Users--------------------------------------------------//
 
+        
         public IUser User => new UserWrapper(_userApi);
         private class UserWrapper : IUser
         {
