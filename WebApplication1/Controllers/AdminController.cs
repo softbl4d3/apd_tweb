@@ -86,8 +86,75 @@ namespace eUseControl.Web.Controllers
 
             return View(tables);
         }
+        [HttpGet]
+        public ActionResult TableAdd()
+        {
 
+            return View();
+        }
+        [HttpPost]
+        public ActionResult TableAdd(TableViewModel table)
+        {
+            TableDTO tableDto = new TableDTO
+            {
+                TableNumber = table.TableNumber,
+                Capacity = table.Capacity,
+                Zone = table.Zone,
+                Status = TStatus.Free
+            };
+            var resp = _session.Table.AddTable(tableDto);
+            if (resp.Status == true)
+            {
+                return RedirectToAction("Dashboard");
+            }
+            else
+            {
+                return View(table);
+            }
+                
+        }
+        [HttpGet]
+        public ActionResult TableEdit(int TableNumber)
+        {
+            TableDTO tableDto = _session.Table.GetTableById(TableNumber);
+            TableViewModel table = new TableViewModel
+            {
+                TableNumber = tableDto.TableNumber,
+                Capacity = tableDto.Capacity,
+                Zone = tableDto.Zone,
+                Status = tableDto.Status,
+            };
+            
+            return View(table);
+        }
 
+        [HttpPost]
+        public ActionResult TableEdit(TableViewModel t)
+        {
+            var tableDto = new TableDTO { 
+                TableNumber = t.TableNumber,
+                Capacity = t.Capacity,
+                Status = t.Status,
+                Zone = t.Zone,
+            };
+
+            var resp = _session.Table.EditTable(tableDto);
+            if (resp.Status == true)
+            {
+                return RedirectToAction("Dashboard");
+            }
+            else
+            {
+                return View(t);
+            }
+        }
+
+        public ActionResult TableDelete(int TableNumber)
+        {
+            _session.Table.DeleteTable(TableNumber);
+            return RedirectToAction("Dashboard");
+            
+        }
         // -------------------------------- Ingredients  ----------------------------------
         public ActionResult Ingredients()
         {
@@ -198,7 +265,7 @@ namespace eUseControl.Web.Controllers
                 IsAvailable = dish.IsAvailable
             }).ToList();
 
-            return View("~View/Admin/Menu/Create.cshtml",dishes);
+            return View("Menu",dishes);
         }
 
         // GET: Admin/Create

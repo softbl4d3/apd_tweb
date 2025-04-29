@@ -393,6 +393,8 @@
     <Content Include="Views\Admin\Ingredients.cshtml" />
     <Content Include="Views\Admin\EditIngredient.cshtml" />
     <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\Admin\TableAdd.cshtml" />
+    <Content Include="Views\Admin\TableEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
