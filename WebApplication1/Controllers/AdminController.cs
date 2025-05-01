@@ -373,6 +373,7 @@ namespace eUseControl.Web.Controllers
                         Status = i.Status
                     }).ToList()
                 };
+                _session.Dish.EditDish(dishDto);
             }
             return View(updatedDish);
         }
