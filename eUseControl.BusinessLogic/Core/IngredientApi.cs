@@ -116,8 +116,6 @@ namespace eUseControl.BusinessLogic.Core
                     Message = $"something went wrong, message = {ex.Message}"
                 };
             }
-
-
             var _dishService = new DishService();
             if (_dishService.ShouldUpdateDish(beforeStatus, existingIng.Status))
             {
@@ -136,11 +134,7 @@ namespace eUseControl.BusinessLogic.Core
                     context.SaveChanges();
                 }
             }
-
-
-
             return new AdminResp { Status = true };
-
         }
 
         public AdminResp DeleteIngredientAction(int Id)
