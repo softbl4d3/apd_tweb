@@ -1,4 +1,4 @@
-﻿@model eUseControl.Web.Models.User
+﻿@model eUseControl.Domain.Entities.DTO.UserDTO
 
 @{
     ViewBag.Title = "Логин для сотрудника";
@@ -24,24 +24,7 @@
             @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group">
-            @Html.Label("Роль")
-            <div class="radio">
-                <label>
-                    @Html.RadioButtonFor(model => model.Role, "Waiter") Официант
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    @Html.RadioButtonFor(model => model.Role, "Chef") Повар
-                </label>
-            </div>
-            <div class="radio">
-                <label>
-                    @Html.RadioButtonFor(model => model.Role, "Admin") Admin
-                </label>
-            </div>
-        </div>
+        
 
         <button type="submit" class="btn btn-primary">Зайти</button>
     }

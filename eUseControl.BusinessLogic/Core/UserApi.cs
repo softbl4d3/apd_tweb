@@ -1,13 +1,131 @@
-﻿using System;
+﻿using eUseControl.Domain.Entities.DTO;
+using eUseControl.Domain.Entities.User;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using eUseControl.BusinessLogic.Interfaces;
+using eUseControl.BusinessLogic.DBModel;
+using eUseControl.Domain.Entities.Resps;
+using System.Net.Http;
+using eUseControl.Helpers;
 namespace eUseControl.BusinessLogic.Core
 {
-    public class UserApi
+    public class UserApi 
     {
+        public RegEmpResp RegisterEmployeeAction(UserDTO data)
+        {
+            try
+            {
+                UserDbTable exisingtuser;
+                using (var context = new UserContext())
+                {
+                    exisingtuser = context.Users.FirstOrDefault(u => u.UserName == data.UserName);
+                }
+                if (exisingtuser != null)
+                {
+                    return new RegEmpResp
+                    {
+                        Message = "user already exist",
+                        Status = false
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new RegEmpResp
+                {
+                    Message = $"Ошибка при регистрации пользователя: {ex.Message}",
+                    Status = false
+                };
+            }
+            try
+            {
+                var user = new UserDbTable
+                {
+                    UserName = data.UserName,
+                    Password = data.Password,
+                    Role = data.Role,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                };
+                using (var context = new UserContext())
+                {
+           
+                    context.Users.Add(user);
+                    context.SaveChanges();
+                }
 
+                return new RegEmpResp
+                {
+                    Message = "Пользователь успешно зарегистрирован",
+                    Status = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RegEmpResp
+                {
+                    Message = $"Ошибка при регистрации пользователя: {ex.Message}",
+                    Status = false
+                };
+            }
+        }
+
+        public List<EmpDTO> GetAllEmployeeAction()
+        {
+            List<EmpDTO> employeesDTO;
+
+            using (var context = new UserContext())
+            {
+                var employees = context.Users
+                    .Select(u => new
+                    {
+                        u.UserName,
+                        u.Role
+                    })
+                    .ToList();
+
+                employeesDTO = employees
+                    .Select(e => new EmpDTO
+                    {
+                        UserName = e.UserName,
+                        Role = e.Role
+                    })
+                    .ToList();
+            }
+
+            return employeesDTO;
+        }
+
+        internal AdminResp LoginAction(UserDTO user)
+        {
+            UserDbTable userDb;
+            try 
+            {
+                var pass = LoginHelper.HashGen(user.Password);
+                using (var context = new UserContext())
+                {
+                    userDb = context.Users.FirstOrDefault(u => u.UserName == user.UserName && u.Password == pass);
+                }
+                if (userDb == null)
+                {
+                    return new AdminResp { Status = false, Message = "The Username or Password is Incorrect" };
+                }
+            }
+            catch(Exception ex) 
+            {
+                return new AdminResp
+                {
+                    Status = false,
+                    Message = $"err : {ex.Message}",
+                };
+            }
+
+
+
+            return new AdminResp{ Status = true};
+        }
     }
 }

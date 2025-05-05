@@ -1,5 +1,5 @@
-﻿@model eUseControl.Web.Models.EmployeeRegistrationViewModel
-
+﻿
+@model eUseControl.Web.Models.EmpRegViewModel
 @{
     ViewBag.Title = "Регистрация сотрудника";
 }
@@ -28,8 +28,9 @@
             new SelectList(
                 new[] 
                 {
-                    new { Value = "Waiter", Text = "Официант" },
-                    new { Value = "Chef", Text = "Повар" }
+                    new { Value = eUseControl.Domain.Enums.URole.Waiter, Text = "Официант" },
+                    new { Value = eUseControl.Domain.Enums.URole.Chef, Text = "Повар" },
+                    new {Value = eUseControl.Domain.Enums.URole.Admin, Text = "Admin"}
                 },
                 "Value", "Text"),
             "Выберите роль", new { @class = "form-control" })

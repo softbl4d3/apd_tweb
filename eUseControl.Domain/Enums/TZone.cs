@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eUseControl.BusinessLogic.Interfaces
+namespace eUseControl.Domain.Enums
 {
-    public interface ISession
+    public enum TZone
     {
+        none,
+        vip,
     }
 }

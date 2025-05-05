@@ -1,0 +1,17 @@
+﻿using eUseControl.Domain.Entities.DTO;
+using eUseControl.Domain.Entities.Resps;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace eUseControl.BusinessLogic.Interfaces
+{
+    public interface IUser
+    {
+        RegEmpResp RegisterEmployee(UserDTO data);
+        List<EmpDTO> GetAllEmployee();
+        AdminResp Login(UserDTO user);
+    }
+}
