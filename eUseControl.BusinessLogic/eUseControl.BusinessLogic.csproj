@@ -59,7 +59,10 @@
     <Compile Include="Core\TableApi.cs" />
     <Compile Include="Core\UserApi.cs" />
     <Compile Include="DBModel\OrderContext.cs" />
+    <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
+    <Compile Include="DishBL.cs" />
+    <Compile Include="IngridientBL.cs" />
     <Compile Include="Interfaces\IDish.cs" />
     <Compile Include="Interfaces\IIngredient.cs" />
     <Compile Include="Interfaces\ITable.cs" />
