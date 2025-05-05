@@ -32,31 +32,22 @@ namespace eUseControl.Web.Controllers
             UserDTO userDto = new UserDTO { 
                 UserName = login.UserName,
                 Password = login.Password,
-                Role = 0,
             };
 
-            var userLogin = _session.User.Login(userDto);
+            var userLogin = _session.Login(userDto);
 
             if (userLogin.Status)
             {
-               
+                HttpCookie cookie = _session.GenCookie(login.UserName);
+                ControllerContext.HttpContext.Response.Cookies.Add(cookie);
+
+                return RedirectToAction("Index", "Home");
             }
-            //if (userLogin.Status)
-            //{
-            //    switch (model.UserName)
-            //    {
-            //        case "Admin":
-            //            return RedirectToAction("Admin", "Dashboard");
-            //        case "Waiter":
-            //            return RedirectToAction("Waiter", "Menu");
-            //        case "Chef":
-            //            return RedirectToAction("Chef", "Dashboard");
-            //        default:
-            //            ModelState.AddModelError("", "Неверная роль или пароль");
-            //            return View(model);
-            //    }
-            //} 
-            return View(login);
+            else
+            {
+                ModelState.AddModelError("", userLogin.Message);
+                return View();
+            }
         }
     }
 }
