@@ -59,7 +59,6 @@
     <Compile Include="Core\TableApi.cs" />
     <Compile Include="Core\UserApi.cs" />
     <Compile Include="DBModel\OrderContext.cs" />
-    <Compile Include="DBModel\SessionContext.cs" />
     <Compile Include="DBModel\UserContext.cs" />
     <Compile Include="DishBL.cs" />
     <Compile Include="IngridientBL.cs" />
@@ -84,9 +83,9 @@
       <DependentUpon>202504290933193_table_rebuild2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\OrderMigrations\Configuration.cs" />
-    <Compile Include="Migrations\UserMigrations\202504261326000_InitialUserCreate.cs" />
-    <Compile Include="Migrations\UserMigrations\202504261326000_InitialUserCreate.Designer.cs">
-      <DependentUpon>202504261326000_InitialUserCreate.cs</DependentUpon>
+    <Compile Include="Migrations\UserMigrations\202505052021066_addedSession.cs" />
+    <Compile Include="Migrations\UserMigrations\202505052021066_addedSession.Designer.cs">
+      <DependentUpon>202505052021066_addedSession.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\UserMigrations\Configuration.cs" />
     <Compile Include="Services\DishService.cs" />
@@ -151,6 +150,7 @@
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.2\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -169,8 +169,8 @@
     <EmbeddedResource Include="Migrations\OrderMigrations\202504290933193_table_rebuild2.resx">
       <DependentUpon>202504290933193_table_rebuild2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\UserMigrations\202504261326000_InitialUserCreate.resx">
-      <DependentUpon>202504261326000_InitialUserCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\UserMigrations\202505052021066_addedSession.resx">
+      <DependentUpon>202505052021066_addedSession.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

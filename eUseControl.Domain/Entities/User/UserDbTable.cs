@@ -19,7 +19,6 @@ namespace eUseControl.Domain.Entities.User
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Несоответсвующий логин ")]
         public string UserName { get; set; }
         [Required]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Несоответсвующий пароль")]
         public string Password { get; set; }
         [Required]
         public URole Role { get; set; }

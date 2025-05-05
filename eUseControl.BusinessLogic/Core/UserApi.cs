@@ -14,6 +14,7 @@ using System.Web;
 using static System.Collections.Specialized.BitVector32;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using System.Net;
 namespace eUseControl.BusinessLogic.Core
 {
     public class UserApi 
@@ -49,7 +50,7 @@ namespace eUseControl.BusinessLogic.Core
                 var user = new UserDbTable
                 {
                     UserName = data.UserName,
-                    Password = data.Password,
+                    Password = LoginHelper.HashGen(data.Password),
                     Role = data.Role,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
@@ -104,12 +105,12 @@ namespace eUseControl.BusinessLogic.Core
         }
         internal HttpCookie Cookie(string loginCredential)
         {
-            var apiCookie = new HttpCookie("testkey")
+            var apiCookie = new HttpCookie("X-KEY")
             {
                 Value = CookieGenerator.Create(loginCredential)
             };
 
-            using (var context = new SessionContext())
+            using (var context = new UserContext())
             {
                 SessionDbTable curent;
                 var validate = new EmailAddressAttribute();
@@ -126,7 +127,7 @@ namespace eUseControl.BusinessLogic.Core
                 {
                     curent.CookieString = apiCookie.Value;
                     curent.ExpireTime = DateTime.Now.AddMinutes(60);
-                    using (var todo = new SessionContext())
+                    using (var todo = new UserContext())
                     {
                         todo.Entry(curent).State = EntityState.Modified;
                         todo.SaveChanges();
@@ -146,7 +147,7 @@ namespace eUseControl.BusinessLogic.Core
 
             return apiCookie;
         }
-        internal AdminResp LoginAction(UserDTO user)
+        internal LoginResp LoginAction(UserDTO user)
         {
             UserDbTable userDb;
             try 
@@ -158,12 +159,12 @@ namespace eUseControl.BusinessLogic.Core
                 }
                 if (userDb == null)
                 {
-                    return new AdminResp { Status = false, Message = "The Username or Password is Incorrect" };
+                    return new LoginResp { Status = false, Message = "The Username or Password is Incorrect" };
                 }
             }
             catch(Exception ex) 
             {
-                return new AdminResp
+                return new LoginResp
                 {
                     Status = false,
                     Message = $"err : {ex.Message}",
@@ -172,7 +173,38 @@ namespace eUseControl.BusinessLogic.Core
 
 
 
-            return new AdminResp{ Status = true};
+            return new LoginResp { Status = true, Role = userDb.Role};
+        }
+
+        internal EmpDTO GetUserByCookieAction(string cookie)
+        {
+            SessionDbTable session;
+            UserDbTable cu;
+
+            using (var db = new UserContext())
+            {
+                session = db.Sessions.FirstOrDefault(s => s.CookieString == cookie && s.ExpireTime > DateTime.Now);
+            }
+
+            if (session == null) return null;
+            using (var db = new UserContext())
+            {
+
+                cu = db.Users.FirstOrDefault(u => u.UserName == session.UserName);
+
+            }
+
+            if (cu == null) return null;
+
+
+            EmpDTO EmpDTO = new EmpDTO
+            {
+                UserName = cu.UserName,
+                Role = cu.Role
+
+            };
+
+            return EmpDTO;
         }
     }
 }

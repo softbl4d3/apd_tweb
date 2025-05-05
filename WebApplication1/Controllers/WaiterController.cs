@@ -6,21 +6,18 @@ using System.Web;
 using System.Web.Mvc;
 using eUseControl.Domain.Entities.DTO;
 using eUseControl.Domain.Enums;
+using eUseControl.Web.Filters;
 
 namespace eUseControl.Web.Controllers
 {
+    [RoleAuthorization(URole.Waiter)]
+
     public class WaiterController : Controller
     {
-        // GET: /Waiter/SelectTable
-        //public ActionResult SelectTable()
-        //{
-        //    // Заглушка данных столиков
-        //    var tables = new List<TableDbTable>
-        //{
-        //    new TableDbTable { Id = 1, TableNumber = 1, Capacity = 2, Status = TStatus.Free },
-        //    new TableDbTable { Id = 2, TableNumber = 2, Capacity = 4, Status = TStatus.Free },
-        //    new TableDbTable { Id = 3, TableNumber = 3, Capacity = 6, Status = TStatus.Free }
-        //};
+        public ActionResult Menu()
+        {
+            return View();
+        }
 
         //    return View(tables.Where(t => t.Status == TStatus.Free).ToList());
         //}

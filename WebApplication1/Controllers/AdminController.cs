@@ -12,22 +12,25 @@ using System.Drawing.Printing;
 using eUseControl.Domain.Entities.Orders;
 using System.Net.NetworkInformation;
 using System.Web.UI.WebControls;
+using eUseControl.Web.Filters;
 
 namespace eUseControl.Web.Controllers
 {
-    public class AdminController : BaseController
+    [RoleAuthorization(URole.Admin)]
+
+    public class AdminController : Controller
     {
         private readonly ITable _tableLogic;
         private readonly IDish _dishLogic;
-        private readonly IUser _session;
         private readonly IIngredient _ingLogic;
+        private readonly IUser _session;
         public AdminController()
         { 
             var bl = new BusinessLogic.BusinessLogic();
             _tableLogic = bl.GetTableBL();
             _dishLogic = bl.GetDishBL();
-            _session = bl.GetSessionBL();
             _ingLogic = bl.GetIngredientBL();
+            _session = bl.GetSessionBL();
         }
 
         // GET: /Admin/RegisterEmployee
@@ -39,8 +42,10 @@ namespace eUseControl.Web.Controllers
         // POST: /Admin/RegisterEmployee
         [HttpPost]
         [ValidateAntiForgeryToken]
+
         public ActionResult RegisterEmployee(EmpRegViewModel model)
         {
+
             if (ModelState.IsValid)
             {
                 UserDTO user = new UserDTO
@@ -60,11 +65,12 @@ namespace eUseControl.Web.Controllers
                 }
             }
 
-                // Если есть ошибки валидации – вернуть представление с сообщениями
                 return View(model);
         }
 
         // Пример метода для вывода списка сотрудников
+       
+
         public ActionResult EmployeeList()
         {
             var employeesDTO = _session.GetAllEmployee();
@@ -76,9 +82,11 @@ namespace eUseControl.Web.Controllers
             }).ToList();
             return View(employees);
         }
+        
 
         public ActionResult Dashboard()
         {
+
 
             List<TableDTO> tableDto = _tableLogic.GetAllTables();
 
@@ -94,12 +102,16 @@ namespace eUseControl.Web.Controllers
             return View(tables);
         }
         [HttpGet]
+     
+
         public ActionResult TableAdd()
         {
 
             return View();
         }
         [HttpPost]
+
+
         public ActionResult TableAdd(TableViewModel table)
         {
             TableDTO tableDto = new TableDTO
@@ -121,6 +133,8 @@ namespace eUseControl.Web.Controllers
                 
         }
         [HttpGet]
+
+
         public ActionResult TableEdit(int TableNumber)
         {
             TableDTO tableDto = _tableLogic.GetTableById(TableNumber);
@@ -136,6 +150,8 @@ namespace eUseControl.Web.Controllers
         }
 
         [HttpPost]
+
+
         public ActionResult TableEdit(TableViewModel t)
         {
             var tableDto = new TableDTO { 
@@ -156,6 +172,7 @@ namespace eUseControl.Web.Controllers
             }
         }
 
+
         public ActionResult TableDelete(int TableNumber)
         {
             _tableLogic.DeleteTable(TableNumber);
@@ -163,6 +180,9 @@ namespace eUseControl.Web.Controllers
             
         }
         // -------------------------------- Ingredients  ----------------------------------
+
+
+
         public ActionResult Ingredients()
         {
             var ingrDTO = _ingLogic.GetAllIngredients();
@@ -178,11 +198,13 @@ namespace eUseControl.Web.Controllers
 
             return View(igredients);
         }
-        
+
+
         public ActionResult IngridientAdd()
         {
             return View();
         }
+
 
         [HttpPost]
         public ActionResult IngridientAdd(IngridientViewModel Ingrid)
@@ -208,6 +230,7 @@ namespace eUseControl.Web.Controllers
             return View();
         }
         [HttpGet]
+
         public ActionResult EditIngredient(int id)
         {
             IngridientDTO ing = _ingLogic.GetIngredientById(id);
@@ -221,6 +244,8 @@ namespace eUseControl.Web.Controllers
             return View(model);
         }
         [HttpPost]
+
+
         public ActionResult EditIngredient(IngridientViewModel ing)
         {
             IngridientDTO ingDto = new IngridientDTO
@@ -242,6 +267,7 @@ namespace eUseControl.Web.Controllers
             }
         }
 
+
         public ActionResult DeleteIngredient (int id)
         {
             var resp = _ingLogic.DeleteIngredient(id);
@@ -258,6 +284,8 @@ namespace eUseControl.Web.Controllers
 
 
         // -------------------------------- Menu  ----------------------------------
+
+
         public ActionResult Menu()
         {
             var dishesDTO = _dishLogic.GetAllDishes();
@@ -277,6 +305,8 @@ namespace eUseControl.Web.Controllers
 
         // GET: Admin/Create
         [HttpGet]
+
+
         public ActionResult Create()
         {
             var ingredientsDto = _ingLogic.GetAllIngredients();
@@ -298,6 +328,8 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+
+
         public ActionResult Create(DishViewModel model)
         {
             if (ModelState.IsValid)
@@ -332,6 +364,7 @@ namespace eUseControl.Web.Controllers
         }
 
 
+
         public ActionResult Edit(int id)
         {
             var dishDto = _dishLogic.GetDishById(id);
@@ -359,6 +392,8 @@ namespace eUseControl.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+
+
         public ActionResult Edit(DishViewModel updatedDish)
         {
             if (ModelState.IsValid)
@@ -385,16 +420,7 @@ namespace eUseControl.Web.Controllers
             return View(updatedDish);
         }
 
-        // POST: Admin/ToggleStatus/5
-        //[HttpPost]
-        //public ActionResult ToggleStatus(int id)
-        //{
-        //    var dish = _dishes.First(d => d.Id == id);
-        //    dish.IsAvailable = !dish.IsAvailable;
-        //    return RedirectToAction("Menu");
-        //}
 
-        // GET: Admin/Delete/5
         public ActionResult Delete(int id)
         {
             
@@ -410,16 +436,6 @@ namespace eUseControl.Web.Controllers
             }
         
         }
-
-        //// POST: Admin/Delete/id
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    var dish = _dishes.First(d => d.Id == id);
-        //    _dishes.Remove(dish);
-        //    return RedirectToAction("Menu");
-        //}
 
 
     }

@@ -16,11 +16,14 @@ namespace eUseControl.BusinessLogic
     {
         public List<EmpDTO> GetAllEmployee() => GetAllEmployeeAction();
 
-        public AdminResp Login(UserDTO user) => LoginAction(user);
+        public LoginResp Login(UserDTO user) => LoginAction(user);
 
         public HttpCookie GenCookie(string loginCredential) => Cookie(loginCredential);
 
         public RegEmpResp RegisterEmployee(UserDTO data) =>RegisterEmployeeAction(data);
-        
+
+        public EmpDTO GetUserByCookie(string apiCookieValue) => GetUserByCookieAction(apiCookieValue);
+
+
     }
 }
