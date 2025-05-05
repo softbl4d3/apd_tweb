@@ -18,10 +18,16 @@ namespace eUseControl.Web.Controllers
     public class AdminController : BaseController
     {
         private readonly ITable _tableLogic;
+        private readonly IDish _dishLogic;
+        private readonly IUser _session;
+        private readonly IIngredient _ingLogic;
         public AdminController()
         { 
             var bl = new BusinessLogic.BusinessLogic();
             _tableLogic = bl.GetTableBL();
+            _dishLogic = bl.GetDishBL();
+            _session = bl.GetSessionBL();
+            _ingLogic = bl.GetIngredientBL();
         }
 
         // GET: /Admin/RegisterEmployee
@@ -43,7 +49,7 @@ namespace eUseControl.Web.Controllers
                     Password = model.Password,
                     Role = (URole)model.Role
                 };
-                var responce = _session.User.RegisterEmployee(user);
+                var responce = _session.RegisterEmployee(user);
                 if (responce.Status == true)
                 {
                     return RedirectToAction("EmployeeList");
@@ -61,7 +67,7 @@ namespace eUseControl.Web.Controllers
         // Пример метода для вывода списка сотрудников
         public ActionResult EmployeeList()
         {
-            var employeesDTO = _session.User.GetAllEmployee();
+            var employeesDTO = _session.GetAllEmployee();
 
             var employees = employeesDTO.Select(user => new EmployeeViewModel
             {
@@ -159,7 +165,7 @@ namespace eUseControl.Web.Controllers
         // -------------------------------- Ingredients  ----------------------------------
         public ActionResult Ingredients()
         {
-            var ingrDTO = _session.Ingredient.GetAllIngredients();
+            var ingrDTO = _ingLogic.GetAllIngredients();
 
             var igredients = ingrDTO.Select(ing => new IngridientViewModel
             {
@@ -189,7 +195,7 @@ namespace eUseControl.Web.Controllers
                     Amount = Ingrid.Amount,
                     Status = (IngridStaus)Ingrid.Status
                 };
-                var responce = _session.Ingredient.AddIngredient(Ignridient);
+                var responce = _ingLogic.AddIngredient(Ignridient);
                 if (responce.Status == true)
                 {
                     return RedirectToAction("Ingredients");
@@ -204,7 +210,7 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult EditIngredient(int id)
         {
-            IngridientDTO ing = _session.Ingredient.GetIngredientById(id);
+            IngridientDTO ing = _ingLogic.GetIngredientById(id);
             var model = new IngridientViewModel
             {
                 Id = ing.Id,
@@ -224,7 +230,7 @@ namespace eUseControl.Web.Controllers
                 Amount = ing.Amount,
                 Status = ing.Status
             };
-            var resp = _session.Ingredient.EditIngredient(ingDto);
+            var resp = _ingLogic.EditIngredient(ingDto);
 
             if (resp.Status == true)
             {
@@ -238,7 +244,7 @@ namespace eUseControl.Web.Controllers
 
         public ActionResult DeleteIngredient (int id)
         {
-            var resp = _session.Ingredient.DeleteIngredient(id);
+            var resp = _ingLogic.DeleteIngredient(id);
 
             if (resp.Status == true)
             {
@@ -254,7 +260,7 @@ namespace eUseControl.Web.Controllers
         // -------------------------------- Menu  ----------------------------------
         public ActionResult Menu()
         {
-            var dishesDTO = _session.Dish.GetAllDishes();
+            var dishesDTO = _dishLogic.GetAllDishes();
 
             var dishes = dishesDTO.Select(dish => new DishViewModel
             {
@@ -273,7 +279,7 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            var ingredientsDto = _session.Ingredient.GetAllIngredients();
+            var ingredientsDto = _ingLogic.GetAllIngredients();
 
             var model = new DishViewModel
             {
@@ -316,7 +322,7 @@ namespace eUseControl.Web.Controllers
                             .ToList()
                  };
 
-                _session.Dish.AddDish(dishDto);
+                _dishLogic.AddDish(dishDto);
 
                 return RedirectToAction("Menu");
 
@@ -328,8 +334,8 @@ namespace eUseControl.Web.Controllers
 
         public ActionResult Edit(int id)
         {
-            var dishDto = _session.Dish.GetDishById(id);
-            var allIngredients = _session.Ingredient.GetAllIngredients();
+            var dishDto = _dishLogic.GetDishById(id);
+            var allIngredients = _ingLogic.GetAllIngredients();
 
             DishViewModel dish = new DishViewModel
             {
@@ -374,7 +380,7 @@ namespace eUseControl.Web.Controllers
                         Status = i.Status
                     }).ToList()
                 };
-                _session.Dish.EditDish(dishDto);
+                _dishLogic.EditDish(dishDto);
             }
             return View(updatedDish);
         }
@@ -392,7 +398,7 @@ namespace eUseControl.Web.Controllers
         public ActionResult Delete(int id)
         {
             
-            var resp = _session.Dish.DeleteDish(id);
+            var resp = _dishLogic.DeleteDish(id);
 
             if (resp.Status == true)
             {
