@@ -62,6 +62,8 @@
     <Compile Include="Entities\Orders\OrderItemDbTable.cs" />
     <Compile Include="Entities\Orders\TableDbTable.cs" />
     <Compile Include="Entities\Resps\AdminResp.cs" />
+    <Compile Include="Entities\Resps\LoginResp.cs" />
+    <Compile Include="Entities\User\SessionDbTable.cs" />
     <Compile Include="Entities\User\UserDbTable.cs" />
     <Compile Include="Enums\DCategory.cs" />
     <Compile Include="Enums\DStatus.cs" />

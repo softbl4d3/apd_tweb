@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace eUseControl.Domain.Entities.User
 {
-    public class SessionDbTable
+    public class SessionDbTable : BaseDbItem
     {
         
         [Required]
@@ -22,4 +22,4 @@ namespace eUseControl.Domain.Entities.User
         public DateTime ExpireTime { get; set; }
     }
 }
-}
+

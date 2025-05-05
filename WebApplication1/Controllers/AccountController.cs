@@ -6,6 +6,8 @@ using System.Web;
 using System.Web.Mvc;
 using eUseControl.Domain.Entities.DTO;
 using eUseControl.BusinessLogic;
+using eUseControl.Domain.Enums;
+using eUseControl.Web.Filters;
 
 namespace eUseControl.Web.Controllers
 {
@@ -23,6 +25,10 @@ namespace eUseControl.Web.Controllers
             return View();
         }
 
+        public ActionResult ErrorAuth()
+        {
+            return View();
+        }
         // POST: Account/Login
 
         [HttpPost]
@@ -41,7 +47,24 @@ namespace eUseControl.Web.Controllers
                 HttpCookie cookie = _session.GenCookie(login.UserName);
                 ControllerContext.HttpContext.Response.Cookies.Add(cookie);
 
-                return RedirectToAction("Index", "Home");
+                switch (userLogin.Role)
+                {
+                    case URole.Admin:
+                        return RedirectToAction("Dashboard", "Admin");
+                        
+                    case URole.Chef:
+                        return RedirectToAction("Menu", "Chef");
+                        
+                    case URole.Waiter:
+                        return RedirectToAction("Menu", "Waiter");
+
+                    case URole.None:
+                        return View();
+
+                    default:
+                        
+                        return View();
+                }
             }
             else
             {

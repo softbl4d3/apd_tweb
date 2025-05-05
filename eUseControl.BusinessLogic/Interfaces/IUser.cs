@@ -12,6 +12,7 @@ namespace eUseControl.BusinessLogic.Interfaces
     {
         RegEmpResp RegisterEmployee(UserDTO data);
         List<EmpDTO> GetAllEmployee();
-        AdminResp Login(UserDTO user);
+        LoginResp Login(UserDTO user);
+        EmpDTO GetUserByCookie(string apiCookieValue);
     }
 }

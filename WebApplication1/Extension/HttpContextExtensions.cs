@@ -14,7 +14,7 @@ namespace eUseControl.Web.Extension
             return (UserDTO)current?.Session["__SessionObject"];
         }
 
-        public static void SetMySessionObject(this HttpContext current, UserDTO profile)
+        public static void SetMySessionObject(this HttpContext current, EmpDTO profile)
         {
             current.Session.Add("__SessionObject", profile);
         }

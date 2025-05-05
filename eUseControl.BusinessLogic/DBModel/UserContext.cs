@@ -14,8 +14,11 @@ namespace eUseControl.BusinessLogic.DBModel
         {
         }
         public DbSet<UserDbTable> Users { get; set; }
-        
+
+        public DbSet<SessionDbTable> Sessions { get; set; }
+
+
     }
-    
-    
+
+
 }
