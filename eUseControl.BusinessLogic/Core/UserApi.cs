@@ -10,6 +10,10 @@ using eUseControl.BusinessLogic.DBModel;
 using eUseControl.Domain.Entities.Resps;
 using System.Net.Http;
 using eUseControl.Helpers;
+using System.Web;
+using static System.Collections.Specialized.BitVector32;
+using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 namespace eUseControl.BusinessLogic.Core
 {
     public class UserApi 
@@ -98,7 +102,50 @@ namespace eUseControl.BusinessLogic.Core
 
             return employeesDTO;
         }
+        internal HttpCookie Cookie(string loginCredential)
+        {
+            var apiCookie = new HttpCookie("testkey")
+            {
+                Value = CookieGenerator.Create(loginCredential)
+            };
 
+            using (var context = new SessionContext())
+            {
+                SessionDbTable curent;
+                var validate = new EmailAddressAttribute();
+                if (validate.IsValid(loginCredential))
+                {
+                    curent = (from e in context.Sessions where e.UserName == loginCredential select e).FirstOrDefault();
+                }
+                else
+                {
+                    curent = (from e in context.Sessions where e.UserName == loginCredential select e).FirstOrDefault();
+                }
+
+                if (curent != null)
+                {
+                    curent.CookieString = apiCookie.Value;
+                    curent.ExpireTime = DateTime.Now.AddMinutes(60);
+                    using (var todo = new SessionContext())
+                    {
+                        todo.Entry(curent).State = EntityState.Modified;
+                        todo.SaveChanges();
+                    }
+                }
+                else
+                {
+                    context.Sessions.Add(new SessionDbTable
+                    {
+                        UserName = loginCredential,
+                        CookieString = apiCookie.Value,
+                        ExpireTime = DateTime.Now.AddMinutes(60)
+                    });
+                    context.SaveChanges();
+                }
+            }
+
+            return apiCookie;
+        }
         internal AdminResp LoginAction(UserDTO user)
         {
             UserDbTable userDb;
