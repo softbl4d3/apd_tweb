@@ -9,6 +9,7 @@ using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.BusinessLogic.DBModel;
 using eUseControl.Domain.Entities.Resps;
 using System.Net.Http;
+using eUseControl.Helpers;
 namespace eUseControl.BusinessLogic.Core
 {
     public class UserApi 
@@ -96,6 +97,35 @@ namespace eUseControl.BusinessLogic.Core
             }
 
             return employeesDTO;
+        }
+
+        internal AdminResp LoginAction(UserDTO user)
+        {
+            UserDbTable userDb;
+            try 
+            {
+                var pass = LoginHelper.HashGen(user.Password);
+                using (var context = new UserContext())
+                {
+                    userDb = context.Users.FirstOrDefault(u => u.UserName == user.UserName && u.Password == pass);
+                }
+                if (userDb == null)
+                {
+                    return new AdminResp { Status = false, Message = "The Username or Password is Incorrect" };
+                }
+            }
+            catch(Exception ex) 
+            {
+                return new AdminResp
+                {
+                    Status = false,
+                    Message = $"err : {ex.Message}",
+                };
+            }
+
+
+
+            return new AdminResp{ Status = true};
         }
     }
 }

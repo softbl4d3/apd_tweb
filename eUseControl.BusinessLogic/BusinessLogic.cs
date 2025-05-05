@@ -15,5 +15,21 @@ namespace eUseControl.BusinessLogic
         {
             return new SessionBL();
         }
+
+        public ITable GetTableBL()
+        {
+            return new TableBL();
+        }
+
+        public IDish GetDishBL()
+        {
+            return new DishBL();
+        }
+
+        public IIngredient GetIngredientBL()
+        {
+            return new IngridientBL(); 
+        }
+            
     }
 }

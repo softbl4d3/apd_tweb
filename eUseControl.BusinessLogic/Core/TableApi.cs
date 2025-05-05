@@ -15,7 +15,7 @@ namespace eUseControl.BusinessLogic.Core
 {
     public class TableApi
     {
-        public AdminResp AddTable(TableDTO tableDto)
+        public AdminResp AddTableAction(TableDTO tableDto)
         {
             TableDbTable tableDb = new TableDbTable
             {
@@ -51,7 +51,7 @@ namespace eUseControl.BusinessLogic.Core
             };
 
         }
-        public AdminResp EditTable(TableDTO tableDto)
+        public AdminResp EditTableAction(TableDTO tableDto)
         {
             TableDbTable tableDb = new TableDbTable
             {
@@ -92,7 +92,7 @@ namespace eUseControl.BusinessLogic.Core
             };
 
         }
-        public AdminResp DeleteTable(int Id)
+        public AdminResp DeleteTableAction(int Id)
         {
             try
             {
@@ -132,7 +132,7 @@ namespace eUseControl.BusinessLogic.Core
             }
 
         }
-        public List<TableDTO> GetAllTables()
+        public List<TableDTO> GetAllTablesAction()
         {
             List<TableDbTable> tableDb;
             try
@@ -158,7 +158,7 @@ namespace eUseControl.BusinessLogic.Core
             return tableDto;
 
         }
-        public TableDTO GetTableById(int Id)
+        public TableDTO GetTableByIdAction(int Id)
         {
             TableDbTable tableDb;
             try
