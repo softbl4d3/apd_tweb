@@ -15,14 +15,15 @@ using System.Web.UI.WebControls;
 
 namespace eUseControl.Web.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
-        private readonly SessionBL _session;
+        private readonly ITable _tableLogic;
         public AdminController()
-        {
-            var bl = new eUseControl.BusinessLogic.BusinessLogic();
-            _session = bl.GetSessionBL();
+        { 
+            var bl = new BusinessLogic.BusinessLogic();
+            _tableLogic = bl.GetTableBL();
         }
+
         // GET: /Admin/RegisterEmployee
         public ActionResult RegisterEmployee()
         {
@@ -73,7 +74,7 @@ namespace eUseControl.Web.Controllers
         public ActionResult Dashboard()
         {
 
-            List<TableDTO> tableDto = _session.Table.GetAllTables();
+            List<TableDTO> tableDto = _tableLogic.GetAllTables();
 
             List<TableViewModel> tables = tableDto.Select(t => new TableViewModel{
 
@@ -102,7 +103,7 @@ namespace eUseControl.Web.Controllers
                 Zone = table.Zone,
                 Status = TStatus.Free
             };
-            var resp = _session.Table.AddTable(tableDto);
+            var resp = _tableLogic.AddTable(tableDto);
             if (resp.Status == true)
             {
                 return RedirectToAction("Dashboard");
@@ -116,7 +117,7 @@ namespace eUseControl.Web.Controllers
         [HttpGet]
         public ActionResult TableEdit(int TableNumber)
         {
-            TableDTO tableDto = _session.Table.GetTableById(TableNumber);
+            TableDTO tableDto = _tableLogic.GetTableById(TableNumber);
             TableViewModel table = new TableViewModel
             {
                 TableNumber = tableDto.TableNumber,
@@ -138,7 +139,7 @@ namespace eUseControl.Web.Controllers
                 Zone = t.Zone,
             };
 
-            var resp = _session.Table.EditTable(tableDto);
+            var resp = _tableLogic.EditTable(tableDto);
             if (resp.Status == true)
             {
                 return RedirectToAction("Dashboard");
@@ -151,7 +152,7 @@ namespace eUseControl.Web.Controllers
 
         public ActionResult TableDelete(int TableNumber)
         {
-            _session.Table.DeleteTable(TableNumber);
+            _tableLogic.DeleteTable(TableNumber);
             return RedirectToAction("Dashboard");
             
         }
