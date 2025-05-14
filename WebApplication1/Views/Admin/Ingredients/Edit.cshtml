@@ -1,16 +1,17 @@
 ﻿@model eUseControl.Web.Models.IngridientViewModel
 
 @{
-    ViewBag.Title = "Добавление ингредиента";
+    ViewBag.Title = "Редактирование ингредиента";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container">
-    <h2>Добавить новый ингредиент</h2>
+    <h2>Редактировать ингредиент</h2>
 
-    @using (Html.BeginForm("IngridientAdd", "Admin", FormMethod.Post))
+    @using (Html.BeginForm("Edit", "Ingredients", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, "Название ингредиента")
@@ -30,6 +31,7 @@
             @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
         </div>
 
-        <button type="submit" class="btn btn-primary" formmethod="post">Добавить ингредиент</button>
+        <button type="submit"formmethod="post" class="btn btn-primary">Сохранить изменения</button>
+        <a href="@Url.Action("Menu", "Ingredient")" class="btn btn-secondary">Отмена</a>
     }
 </div>

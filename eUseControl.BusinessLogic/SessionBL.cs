@@ -17,7 +17,7 @@ namespace eUseControl.BusinessLogic
         public List<EmpDTO> GetAllEmployee() => GetAllEmployeeAction();
 
         public LoginResp Login(UserDTO user) => LoginAction(user);
-
+        public RegEmpResp DeleteUser(string userName) => DeleteUserAction(userName);
         public HttpCookie GenCookie(string loginCredential) => Cookie(loginCredential);
 
         public RegEmpResp RegisterEmployee(UserDTO data) =>RegisterEmployeeAction(data);

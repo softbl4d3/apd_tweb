@@ -8,7 +8,7 @@
 <div class="container">
     <h2>Редактировать ингредиент</h2>
 
-    @using (Html.BeginForm("TableEdit", "Admin", FormMethod.Post))
+    @using (Html.BeginForm("Edit", "Tables", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.TableNumber)
@@ -32,6 +32,6 @@
         </div>
 
         <button type="submit" formmethod="post" class="btn btn-primary">Сохранить изменения</button>
-        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary">Отмена</a>
+        <a href="@Url.Action("Dashboard", "Tables", new {area = "Admin" })" class="btn btn-secondary">Отмена</a>
     }
 </div>

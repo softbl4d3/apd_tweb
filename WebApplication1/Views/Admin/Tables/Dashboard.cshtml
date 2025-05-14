@@ -22,8 +22,8 @@
                             Статус: @table.Status
                         </p>
                         <div class="mt-1">
-                            <a href="@Url.Action("TableEdit", "Admin", new { TableNumber = table.TableNumber })" class="btn btn-sm btn-warning">Редактировать</a>
-                            <a href="@Url.Action("TableDelete", "Admin", new { TableNumber = table.TableNumber })" class="btn btn-sm btn-danger" onclick="return confirm('Вы уверены, что хотите удалить этот ингредиент?');">Удалить</a>
+                            <a href="@Url.Action("Edit", "Tables", new { area = "Admin", TableNumber = table.TableNumber })" class="btn btn-sm btn-warning">Редактировать</a>
+                            <a href="@Url.Action("Delete", "Tables", new { area = "Admin", TableNumber = table.TableNumber })" class="btn btn-sm btn-danger" onclick="return confirm('Вы уверены, что хотите удалить этот ингредиент?');">Удалить</a>
 
                         </div>
 
@@ -33,7 +33,7 @@
         }
     </div>
     <div class="mt-3">
-        <a href="@Url.Action("TableAdd", "Admin")" class="btn btn-primary">Добавить столик</a>
+        <a href="@Url.Action("Add", "Tables", new {area = "Admin"})" class="btn btn-primary">Добавить столик</a>
     </div>
 
     <h2>Текущие заказы</h2>

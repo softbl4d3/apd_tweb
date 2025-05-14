@@ -1,5 +1,5 @@
 ﻿@using eUseControl.Web.Models
-@model List<Table>
+@model List<TableViewModel>
 
 @{
     ViewBag.Title = "Выбор столика";
@@ -18,8 +18,16 @@
                             Вместимость: @table.Capacity человек<br>
                             Статус: @table.Status
                         </p>
-                        @Html.ActionLink("Взять заказ", "TakeOrder", new { tableId = table.Id },
-                            new { @class = "btn btn-primary" })
+                        @if (table.Status == eUseControl.Domain.Enums.TStatus.Free)
+                        {
+                            @Html.ActionLink("Взять заказ", "TakeOrder", new { area = "Waiter", tableNumber = table.TableNumber },
+                                new { @class = "btn btn-primary" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Взять заказ", "TakeOrder", new { area = "Waiter", tableNumber = table.TableNumber },
+                                new { @class = "btn btn-secondary disabled", @disabled = "disabled" })
+                        }
                     </div>
                 </div>
             </div>

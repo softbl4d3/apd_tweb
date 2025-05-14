@@ -1,1 +1,31 @@
-﻿Dashboard chef
+﻿@model List<eUseControl.Web.Models.ChefOrderItemViewModel>
+
+@{
+    ViewBag.Title = "Chef Dashboard";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Chef Dashboard</h2>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.DishName</h5>
+                        <p class="card-text"><strong>Количество:</strong> @item.Amount</p>
+                        <p class="card-text"><strong>Примечание:</strong> @item.Note</p>
+                        <p class="card-text"><strong>Статус:</strong> @item.Status</p>
+
+                        <form method="post" action="@Url.Action("UpdateStatus", "Chef")">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" name="status" value="Ready" class="btn btn-success btn-sm">Готово</button>
+                            <button type="submit" name="status" value="InProgress" class="btn btn-danger btn-sm">Не готово</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

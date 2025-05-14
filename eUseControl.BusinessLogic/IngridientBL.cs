@@ -16,6 +16,6 @@ namespace eUseControl.BusinessLogic
         public AdminResp EditIngredient(IngridientDTO ingrid) => EditIngredientAction(ingrid);
         public AdminResp DeleteIngredient(int Id) => DeleteIngredientAction(Id);
         public List<IngridientDTO> GetAllIngredients() => GetAllIngredientsAction();
-        public IngridientDTO GetIngredientById(int ingId) => GetIngredientById(ingId);
+        public IngridientDTO GetIngredientById(int ingId) => GetIngredietByIdAction(ingId);
     }
 }

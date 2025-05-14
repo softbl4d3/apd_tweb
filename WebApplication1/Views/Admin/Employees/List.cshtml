@@ -1,0 +1,37 @@
+﻿@model List<eUseControl.Web.Models.EmployeeViewModel>
+
+@{
+    ViewBag.Title = "Список сотрудников";
+}
+
+<h2>Список сотрудников</h2>
+
+<p>
+    @Html.ActionLink("Добавить сотрудника", "Register", "Employees", new {area = "Admin"}, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+
+            <th>Логин</th>
+            <th>Роль</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+
+                <td>@employee.UserName</td>
+                <td>@employee.Role</td>
+                <td>
+
+                    @Html.ActionLink("Редактировать", "Edit", new { area = "Admin", id = employee.Id }, new { @class = "btn btn-sm btn-warning" }) 
+                    @Html.ActionLink("Удалить", "Delete", new {area = "Admin", username = employee.UserName }, new { @class = "btn btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

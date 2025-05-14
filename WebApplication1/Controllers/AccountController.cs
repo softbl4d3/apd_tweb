@@ -50,13 +50,13 @@ namespace eUseControl.Web.Controllers
                 switch (userLogin.Role)
                 {
                     case URole.Admin:
-                        return RedirectToAction("Dashboard", "Admin");
+                        return RedirectToAction("Dashboard", "Tables", new { area = "Admin" });
                         
                     case URole.Chef:
-                        return RedirectToAction("Menu", "Chef");
+                        return RedirectToAction("Menu", "Chef", new { area = "Chef" });
                         
                     case URole.Waiter:
-                        return RedirectToAction("Menu", "Waiter");
+                        return RedirectToAction("Select", "Table", new { area = "Waiter" });
 
                     case URole.None:
                         return View();

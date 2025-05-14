@@ -53,9 +53,10 @@
     <Compile Include="Entities\DTO\ChefDTO.cs" />
     <Compile Include="Entities\DTO\DishDTO.cs" />
     <Compile Include="Entities\DTO\IngridientDTO.cs" />
+    <Compile Include="Entities\DTO\OrderDTO.cs" />
+    <Compile Include="Entities\DTO\OrderItemDTO.cs" />
     <Compile Include="Entities\DTO\TableDTO.cs" />
     <Compile Include="Entities\DTO\UserDTO.cs" />
-    <Compile Include="Entities\DTO\WaiterDTO.cs" />
     <Compile Include="Entities\Orders\DishDbTable.cs" />
     <Compile Include="Entities\Orders\IngridientDbTable.cs" />
     <Compile Include="Entities\Orders\OrderDbTable.cs" />
