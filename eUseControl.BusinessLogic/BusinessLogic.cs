@@ -30,6 +30,11 @@ namespace eUseControl.BusinessLogic
         {
             return new IngridientBL(); 
         }
-            
+
+        public IOrder GetOrderBL()
+        {
+            return new OrderBL();
+        }
+
     }
 }

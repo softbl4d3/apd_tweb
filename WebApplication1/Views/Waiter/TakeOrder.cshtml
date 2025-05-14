@@ -1,128 +1,103 @@
-﻿@using eUseControl.Web.Models
-@model List<Dish>
+﻿@model OrderViewModel
 
 @{
-    ViewBag.Title = "Создание заказа";
-    var tableId = (int)ViewBag.TableId; // Явное приведение типа
+    ViewBag.Title = "Take Order";
 }
 
 <div class="container mt-4">
-    <h2>Заказ для столика #@tableId</h2>
+    <h2 class="text-center mb-4">Take Order for Table @Model.TableNumber</h2>
 
-    <form id="orderForm">
-        @Html.Hidden("TableId", tableId) <!-- Теперь тип известен -->
+    <form method="post" action="@Url.Action("TakeOrder", "Table")">
+        <input type="hidden" name="TableNumber" value="@Model.TableNumber" />
 
-        <div id="orderItems">
-            <div class="order-item mb-3">
-                <div class="row">
-                    <div class="col-md-4">
-                        <select class="form-control dish-select" name="Items[0].DishId">
-                            <option value="">Выберите блюдо</option>
-                            @foreach (var dish in Model.Where(d => d.IsAvailable))
-                            {
-                                <option value="@dish.Id">@dish.Name - @dish.Price.ToString("C")</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="number" class="form-control" name="Items[0].Quantity" value="1" min="1">
-                    </div>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" name="Items[0].Note" placeholder="Примечание">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger remove-item">×</button>
-                    </div>
-                </div>
-            </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Dish</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Dishes.Count; i++)
+                    {
+                        var dish = Model.Dishes[i];
+                        <tr id="dish-row-@dish.Id">
+                            <td>@dish.Name</td>
+                            <td>@dish.Category</td>
+                            <td>@dish.Price.ToString("C")</td>
+                            <td>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <button type="button" class="btn btn-outline-danger" onclick="decrementQuantity('@dish.Id')">-</button>
+                                    </div>
+                                    <input type="number"
+                                           class="form-control quantity-input"
+                                           id="quantity-@dish.Id"
+                                           name="Dishes[@i].Quantity"
+                                           min="0"
+                                           value="@dish.Quantity"
+                                           onchange="updateRowHighlight('@dish.Id')" />
+                                    <input type="hidden" name="Dishes[@i].Id" value="@dish.Id" />
+                                    <input type="hidden" name="Dishes[@i].Name" value="@dish.Name" />
+                                    <input type="hidden" name="Dishes[@i].Price" value="@dish.Price" />
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-outline-primary" onclick="incrementQuantity('@dish.Id')">+</button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="text"
+                                       class="form-control"
+                                       name="Dishes[@i].Note"
+                                       value="@dish.Note"
+                                       placeholder="Add a comment" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
 
-        <button type="button" id="addItem" class="btn btn-secondary mb-3">Добавить блюдо</button>
-
-        <div class="form-group">
-            <label>Комментарий к заказу:</label>
-            <textarea class="form-control" name="Comment" rows="3"></textarea>
+        <div class="form-group mt-4">
+            <label for="Note">Order Comment:</label>
+            <textarea class="form-control" id="Note" name="Note" rows="3" placeholder="Add a comment for the entire order">@Model.Note</textarea>
         </div>
 
-        <button type="submit" class="btn btn-success">Отправить на кухню</button>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success btn-lg">
+                <i class="fas fa-check"></i> Submit Order
+            </button>
+        </div>
     </form>
 </div>
 
-@section Styles {
-    <style>
-        .order-item {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+<script>
+    function incrementQuantity(dishId) {
+        const quantityInput = document.getElementById(`quantity-${dishId}`);
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+        updateRowHighlight(dishId);
+    }
+
+    function decrementQuantity(dishId) {
+        const quantityInput = document.getElementById(`quantity-${dishId}`);
+        const currentValue = parseInt(quantityInput.value);
+        if (currentValue > 0) {
+            quantityInput.value = currentValue - 1;
         }
+        updateRowHighlight(dishId);
+    }
 
-        .dish-select {
-            max-width: 250px;
+    function updateRowHighlight(dishId) {
+        const quantityInput = document.getElementById(`quantity-${dishId}`);
+        const row = document.getElementById(`dish-row-${dishId}`);
+        if (parseInt(quantityInput.value) > 0) {
+            row.classList.add('table-success');
+        } else {
+            row.classList.remove('table-success');
         }
-
-        .remove-item {
-            font-size: 1.5rem;
-            line-height: 1;
-            padding: 0 0.5rem;
-        }
-    </style>
-}
-
-@section Scripts {
-    <script>
-        $(document).ready(function() {
-            let itemIndex = 1;
-
-            $('#addItem').click(function() {
-                const newItem = $(`<div class="order-item mb-3">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <select class="form-control dish-select" name="Items[${itemIndex}].DishId">
-                                <option value="">Выберите блюдо</option>
-                                @foreach (var dish in Model.Where(d => d.IsAvailable))
-                                {
-                                    <text>
-                                    <option value="@dish.Id">@dish.Name - @dish.Price.ToString("C")</option>
-                                    </text>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <input type="number" class="form-control" name="Items[${itemIndex}].Quantity" value="1" min="1">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" name="Items[${itemIndex}].Note" placeholder="Примечание">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-danger remove-item">×</button>
-                        </div>
-                    </div>
-                </div>`);
-
-                $('#orderItems').append(newItem);
-                itemIndex++;
-            });
-
-            $('#orderItems').on('click', '.remove-item', function() {
-                $(this).closest('.order-item').remove();
-            });
-
-            $('#orderForm').submit(function(e) {
-                e.preventDefault();
-
-                $.ajax({
-                    url: '@Url.Action("SubmitOrder")',
-                    type: 'POST',
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        if (response.success) {
-                            window.location.href = '@Url.Action("Index", "Home")';
-                        } else {
-                            alert('Ошибка при сохранении заказа');
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-}
+    }
+</script>

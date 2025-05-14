@@ -8,7 +8,7 @@
 <div class="container">
     <h2>Добавить новый столик</h2>
 
-    @using (Html.BeginForm("TableAdd", "Admin", FormMethod.Post))
+    @using (Html.BeginForm("Add", "Tables", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 

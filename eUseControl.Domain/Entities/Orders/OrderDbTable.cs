@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using eUseControl.Domain.Entities;
+using eUseControl.Domain.Entities.User;
 using eUseControl.Domain.Enums;
 
 
@@ -12,8 +13,8 @@ namespace eUseControl.Domain.Entities.Orders
 
     public class OrderDbTable : BaseDbItem
     {
-        public int TableId { get; set; }
-        public int WaiterId { get; set; }
+        public TableDbTable TableId { get; set; }
+        public UserDbTable WaiterId { get; set; }
         public DateTime CompletedTime { get; set; }
         public DStatus Status { get; set; } 
         public decimal TotalAmount { get; set; }

@@ -1,8 +1,10 @@
 ﻿@using eUseControl.Web.Models
 @model List<DishViewModel>
-
-<h2>Управление меню</h2>
+@using (Html.BeginForm("Menu", "Dish", new { area = "Admin" }, FormMethod.Post))
+{
+    <h2>Управление меню</h2>
 <p>
+
     @Html.ActionLink("Добавить блюдо", "Create", null, new { @class = "btn btn-primary" })
 </p>
 
@@ -26,13 +28,13 @@
                 </div>
             </td>
             <td>
-                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-warning" })
-                @Html.ActionLink("Удалить", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
+                @Html.ActionLink("Редактировать", "Edit", new { area = "Admin", id = item.Id }, new { @class = "btn btn-sm btn-warning" })
+                @Html.ActionLink("Удалить", "Delete", new { area = "Admin", id = item.Id }, new { @class = "btn btn-sm btn-danger" })
             </td>
         </tr>
     }
 </table>
-
+}
 @section Scripts {
     <script>
         $(function () {

@@ -275,6 +275,9 @@
     <Content Include="Scripts\esm\popper.js.map" />
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
+    <Compile Include="Models\ChefOrderItemViewModel.cs" />
+    <Compile Include="Models\OrderItemViewModel.cs" />
+    <Compile Include="Models\OrderViewModel.cs" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -362,10 +365,16 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\ChefAreaRegistration.cs" />
+    <Compile Include="Areas\WaiterAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\ChefController.cs" />
-    <Compile Include="Controllers\WaiterController.cs" />
+    <Compile Include="Controllers\Admin\DishesController.cs" />
+    <Compile Include="Controllers\Admin\EmployeesController.cs" />
+    <Compile Include="Controllers\Admin\IngredientsController.cs" />
+    <Compile Include="Controllers\Admin\TablesController.cs" />
+    <Compile Include="Controllers\Chef\ChefController.cs" />
+    <Compile Include="Controllers\Waiter\TableController.cs" />
     <Compile Include="Extension\HttpContextExtensions.cs" />
     <Compile Include="Filters\RoleAuthorizationAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -376,8 +385,10 @@
     <Compile Include="Models\EmpRegViewModel.cs" />
     <Compile Include="Models\IngredientSelectionViewModel.cs" />
     <Compile Include="Models\IngridientViewModel.cs" />
+    <Compile Include="Models\MenuViewModel.cs" />
     <Compile Include="Models\TableViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
+    <Compile Include="Models\WaiterOrderViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -386,13 +397,13 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Account\ErrorAuth.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
-    <Content Include="Views\Admin\RegisterEmployee.cshtml" />
-    <Content Include="Views\Admin\EmployeeList.cshtml" />
+    <Content Include="Views\Admin\Employees\Register.cshtml" />
+    <Content Include="Views\Admin\Employees\List.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Admin\Dashboard.cshtml" />
+    <Content Include="Views\Admin\Tables\Dashboard.cshtml" />
     <Content Include="Views\Chef\Dashboard.cshtml" />
-    <Content Include="Views\Admin\Menu.cshtml" />
-    <Content Include="Views\Admin\Edit.cshtml" />
+    <Content Include="Views\Admin\Dish\Menu.cshtml" />
+    <Content Include="Views\Admin\Dish\Edit.cshtml" />
     <Content Include="Views\Shared\_AdminNavigation.cshtml" />
     <Content Include="Views\Shared\_ChefNavigation.cshtml" />
     <Content Include="Views\Shared\_WaiterNavigation.cshtml" />
@@ -438,14 +449,15 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Admin\IngridientAdd.cshtml" />
-    <Content Include="Views\Admin\Ingredients.cshtml" />
-    <Content Include="Views\Admin\EditIngredient.cshtml" />
-    <Content Include="Views\Admin\Create.cshtml" />
-    <Content Include="Views\Admin\TableAdd.cshtml" />
-    <Content Include="Views\Admin\TableEdit.cshtml" />
-    <Content Include="Views\Waiter\Menu.cshtml" />
+    <Content Include="Views\Admin\Ingredients\Add.cshtml" />
+    <Content Include="Views\Admin\Ingredients\Menu.cshtml" />
+    <Content Include="Views\Admin\Ingredients\Edit.cshtml" />
+    <Content Include="Views\Admin\Dish\Create.cshtml" />
+    <Content Include="Views\Admin\Tables\Add.cshtml" />
+    <Content Include="Views\Admin\Tables\Edit.cshtml" />
     <Content Include="Views\Chef\Menu.cshtml" />
+    <Content Include="Views\Waiter\Orders.cshtml" />
+    <Content Include="Views\Waiter\OrderItems.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -455,6 +467,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Admin\Orders\" />
     <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>

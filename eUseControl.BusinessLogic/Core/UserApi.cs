@@ -175,7 +175,29 @@ namespace eUseControl.BusinessLogic.Core
 
             return new LoginResp { Status = true, Role = userDb.Role};
         }
+        internal RegEmpResp DeleteUserAction(string username)
+        {
+            UserDbTable userDb;
 
+            using (var context = new UserContext())
+            {
+                userDb = context.Users.FirstOrDefault(u => u.UserName == username);
+            }
+
+            if (userDb == null)
+            {
+                return new RegEmpResp { Message = "User not found", Status = false };
+            }
+
+            using (var context = new UserContext())
+            {
+                context.Users.Attach(userDb); 
+                context.Users.Remove(userDb);
+                context.SaveChanges();
+            }
+
+            return new RegEmpResp { Message = "User deleted", Status = true };
+        }
         internal EmpDTO GetUserByCookieAction(string cookie)
         {
             SessionDbTable session;
