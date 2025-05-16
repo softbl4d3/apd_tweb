@@ -53,7 +53,7 @@ namespace eUseControl.Web.Controllers
                         return RedirectToAction("Dashboard", "Tables", new { area = "Admin" });
                         
                     case URole.Chef:
-                        return RedirectToAction("Menu", "Chef", new { area = "Chef" });
+                        return RedirectToAction("OrderItems", "Chef", new { area = "Chef" });
                         
                     case URole.Waiter:
                         return RedirectToAction("Select", "Table", new { area = "Waiter" });

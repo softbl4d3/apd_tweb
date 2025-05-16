@@ -9,6 +9,7 @@ namespace eUseControl.Web.Models
 {
     public class OrderItemViewModel
     {
+        public int Id { get; set; }
         public string DishName { get; set; }
         public int TableNumber { get; set; }
         public int Amount { get; set; }

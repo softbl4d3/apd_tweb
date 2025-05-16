@@ -1,5 +1,6 @@
 ﻿@model List<eUseControl.Web.Models.OrderItemViewModel>
 @using eUseControl.Domain.Enums
+
 @{
     ViewBag.Title = "Заказы";
 }
@@ -20,12 +21,16 @@
                             <p class="card-text">Примечание: @item.Note</p>
                         }
                         <p class="card-text">Статус: @item.Status</p>
+
                         @if (item.Status != DStatus.Completed && item.Status != DStatus.Cancelled)
                         {
-                            <form method="post" asp-action="MarkAsDelivered" asp-route-dishName="@item.DishName" asp-route-tableNumber="@item.TableNumber">
-                                @Html.ActionLink("Отнес", "MarkDone", new { area = "Waiter" },
-                                     new { @class = "btn btn-primary" })
-                            </form>
+                            using (Html.BeginForm("MarkConfirmed", "Table", FormMethod.Post, new { @class = "d-inline" }))
+                            {
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-primary" onclick="return confirm('Подтвердите, что заказ готов.');">
+                                    Готово
+                                </button>
+                            }
                         }
                     </div>
                 </div>

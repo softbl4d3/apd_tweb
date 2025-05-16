@@ -54,7 +54,7 @@ namespace eUseControl.Web.Controllers
                 .Select(o => new WaiterOrderViewModel
                 {
                     TableNumber = o.TableNumber,
-                    Status = o.Status.ToString(),
+                    Status = o.Status,
                     TotalAmount = o.TotalAmount,
                     OrderComment = o.Note,
                     Items = o.OrderItems.Select(i =>
@@ -82,11 +82,13 @@ namespace eUseControl.Web.Controllers
             List<OrderItemDTO> allOrderItems = _orderLogic.GetAllOrderItems();
 
             var myOrderItems = allOrderItems
-                .Where(n => n.WaiterName == profile.UserName)
+                .Where(oi => oi.WaiterName == profile.UserName)
+                .Where(oi => oi.Status != DStatus.Completed)
                 .ToList();
 
             var ordItemVM = myOrderItems.Select(oi => new OrderItemViewModel
             {
+                Id = oi.Id,
                 DishName = oi.DishName,
                 Amount = oi.Amount,
                 Note = oi.Note,
@@ -110,7 +112,9 @@ namespace eUseControl.Web.Controllers
                 Category = d.Category,
                 Price = d.Price,
                 IsAvailable = d.IsAvailable
-            }).ToList();
+            })
+                .Where(d => d.IsAvailable)
+                .ToList();
             var model = new OrderViewModel
             {
                 TableNumber = tableNumber,
@@ -160,9 +164,16 @@ namespace eUseControl.Web.Controllers
             return RedirectToAction("Select");
         }
 
-
-
-
+        [HttpPost]
+        public ActionResult MarkConfirmed(int id)
+        {
+            var status = DStatus.Completed;
+            var resp = _orderLogic.ChangeOrderItemStatus(id, status);
+            if (resp.Status)
+            {
+                return RedirectToAction("OrderItems");
+            }
+            return RedirectToAction("OrderItems");
+        }
     }
-
 }

@@ -1,31 +1,53 @@
-﻿@model List<eUseControl.Web.Models.ChefOrderItemViewModel>
+﻿@model List<eUseControl.Web.Models.OrderItemViewModel>
+@using eUseControl.Domain.Enums
 
 @{
-    ViewBag.Title = "Chef Dashboard";
+    ViewBag.Title = "Заказы для приготовления";
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4">Chef Dashboard</h2>
-
-    <div class="row">
+    <h1>Заказы для приготовления</h1>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach (var item in Model)
         {
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">@item.DishName</h5>
-                        <p class="card-text"><strong>Количество:</strong> @item.Amount</p>
-                        <p class="card-text"><strong>Примечание:</strong> @item.Note</p>
-                        <p class="card-text"><strong>Статус:</strong> @item.Status</p>
+            if (item.Status == DStatus.InProgress)
+            {
+                <div class="col">
+                    <div class="card h-100 @GetOrderStatusClass(item.Status) border-4 shadow rounded-3" style="border-radius: 50px;">
+                        <div class="card-body">
+                            <h5 class="card-title">Блюдо: @item.DishName</h5>
+                            <p class="card-text">Столик: @item.TableNumber</p>
+                            <p class="card-text">Количество: @item.Amount</p>
+                            @if (!string.IsNullOrEmpty(item.Note))
+                            {
+                                <p class="card-text">Примечание: @item.Note</p>
+                            }
+                            <p class="card-text">Статус: @item.Status</p>
 
-                        <form method="post" action="@Url.Action("UpdateStatus", "Chef")">
-                            <input type="hidden" name="id" value="@item.Id" />
-                            <button type="submit" name="status" value="Ready" class="btn btn-success btn-sm">Готово</button>
-                            <button type="submit" name="status" value="InProgress" class="btn btn-danger btn-sm">Не готово</button>
-                        </form>
+                            @using (Html.BeginForm("MarkReady", "Chef", FormMethod.Post))
+                            {
+                                @Html.Hidden("Id", item.Id)
+
+                                <button type="submit" class="btn btn-success" onclick="return confirm('Подтвердите, что заказ готов.');">Готово</button>
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         }
     </div>
 </div>
+
+@functions {
+    string GetOrderStatusClass(DStatus status)
+    {
+        return status switch
+        {
+            DStatus.InProgress => "border-warning",
+            DStatus.Ready => "border-success",
+            DStatus.Completed => "border-secondary",
+            DStatus.Cancelled => "border-danger",
+            _ => "border-light"
+        };
+    }
+}
