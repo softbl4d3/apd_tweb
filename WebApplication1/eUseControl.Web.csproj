@@ -458,6 +458,7 @@
     <Content Include="Views\Chef\Menu.cshtml" />
     <Content Include="Views\Waiter\Orders.cshtml" />
     <Content Include="Views\Waiter\OrderItems.cshtml" />
+    <Content Include="Views\Admin\Employees\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

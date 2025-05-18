@@ -7,6 +7,7 @@ using eUseControl.BusinessLogic.Core;
 using eUseControl.BusinessLogic.Interfaces;
 using eUseControl.Domain.Entities.DTO;
 using eUseControl.Domain.Entities.Resps;
+using eUseControl.Domain.Enums;
 
 namespace eUseControl.BusinessLogic
 {
@@ -18,6 +19,6 @@ namespace eUseControl.BusinessLogic
 
         public List<OrderItemDTO> GetAllOrderItems() => GetAllOrderItemsAction();
 
-
+        public AdminResp ChangeOrderItemStatus(int id, DStatus status) => ChangeOrderItemStatusAction(id, status);
     }
 }

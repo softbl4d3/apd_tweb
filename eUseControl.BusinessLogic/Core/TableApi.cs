@@ -71,6 +71,7 @@ namespace eUseControl.BusinessLogic.Core
                     if (existTable != null)
                     {
                         tableDb.Id = existTable.Id;
+                        tableDb.UpdatedAt = DateTime.Now;
                         context.Tables.AddOrUpdate(tableDb);
                         context.SaveChanges();
                     }
@@ -98,7 +99,10 @@ namespace eUseControl.BusinessLogic.Core
             {
                 using (var context = new OrderContext())
                 {
-                    var existTable = context.Tables.FirstOrDefault(t => t.TableNumber == Id);
+                    var existTable = context.Tables
+                        .Include("OrderId")
+                        .Include("OrderId.OrderItems")
+                        .FirstOrDefault(t => t.TableNumber == Id);
 
                     if (existTable != null)
                     {

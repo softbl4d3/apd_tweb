@@ -15,6 +15,9 @@ namespace eUseControl.BusinessLogic.Interfaces
 
         RegEmpResp DeleteUser(string userName);
         LoginResp Login(UserDTO user);
+
+        EmpDTO GetUserByName(string username);
+        LoginResp Edit(UserDTO user);
         EmpDTO GetUserByCookie(string apiCookieValue);
     }
 }

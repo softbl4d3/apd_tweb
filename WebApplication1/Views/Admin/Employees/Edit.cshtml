@@ -1,0 +1,42 @@
+﻿@model eUseControl.Web.Models.EmpRegViewModel
+@{
+    ViewBag.Title = "Редактировать сотрудника"; 
+}
+
+<h2>Редактировать сотрудника</h2>
+
+@using (Html.BeginForm("Edit", "Employees", FormMethod.Post)) 
+{
+    @Html.AntiForgeryToken()
+
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserName)
+        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.UserName)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("NewPassword", "Поменять пароль (оставьте пустым, если не хотите менять)") // Изменена метка для пароля
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password)
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Role)
+        @Html.DropDownListFor(m => m.Role,
+            new SelectList(
+                new[]
+                {
+                    new { Value = eUseControl.Domain.Enums.URole.Waiter, Text = "Официант" },
+                    new { Value = eUseControl.Domain.Enums.URole.Chef, Text = "Повар" },
+                    new {Value = eUseControl.Domain.Enums.URole.Admin, Text = "Admin"}
+                },
+                "Value", "Text", Model.Role), 
+            "Выберите роль", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Role)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+
+}

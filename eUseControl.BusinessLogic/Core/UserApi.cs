@@ -15,11 +15,12 @@ using static System.Collections.Specialized.BitVector32;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Net;
+using eUseControl.Domain.Enums;
 namespace eUseControl.BusinessLogic.Core
 {
     public class UserApi 
     {
-        public RegEmpResp RegisterEmployeeAction(UserDTO data)
+        internal RegEmpResp RegisterEmployeeAction(UserDTO data)
         {
             try
             {
@@ -77,8 +78,72 @@ namespace eUseControl.BusinessLogic.Core
                 };
             }
         }
-
-        public List<EmpDTO> GetAllEmployeeAction()
+        internal LoginResp EditAction(UserDTO user)
+        {
+            UserDbTable userDb;
+            try
+            {
+                using (var context = new UserContext())
+                {
+                    userDb = context.Users.FirstOrDefault(u => u.UserName == user.UserName);
+                }
+                if (userDb == null)
+                {
+                    return new LoginResp { Status = false, Message = "User not found" };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new LoginResp
+                {
+                    Status = false,
+                    Message = $"err : {ex.Message}",
+                };
+            }
+            using (var context = new UserContext())
+            {
+                userDb.Role = user.Role;
+                userDb.UserName = user.UserName;
+                userDb.Password = LoginHelper.HashGen(user.Password);
+                userDb.UpdatedAt = DateTime.Now;
+                context.Entry(userDb).State = EntityState.Modified;
+                context.SaveChanges();
+            }
+            return new LoginResp { Status = true, Role = userDb.Role };
+        }
+        internal EmpDTO GetUserByNameAction(string username)
+        {
+            UserDbTable userDb;
+            try
+            {
+                using (var context = new UserContext())
+                {
+                    userDb = context.Users.FirstOrDefault(u => u.UserName == username);
+                }
+                if (userDb == null)
+                {
+                    return new EmpDTO
+                    {
+                        UserName = null,
+                        Role = URole.None,
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new EmpDTO
+                {
+                    UserName = null,
+                    Role = URole.None,
+                };
+            }
+            return new EmpDTO
+            {
+                UserName = userDb.UserName,
+                Role = userDb.Role,
+            };
+        }
+        internal List<EmpDTO> GetAllEmployeeAction()
         {
             List<EmpDTO> employeesDTO;
 

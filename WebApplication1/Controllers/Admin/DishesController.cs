@@ -44,8 +44,6 @@ namespace eUseControl.Web.Controllers.Admin
 
         // GET: Admin/Create
         [HttpGet]
-
-
         public ActionResult Create()
         {
             var ingredientsDto = _ingLogic.GetAllIngredients();

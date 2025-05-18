@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using eUseControl.Domain.Entities.DTO;
 using eUseControl.Domain.Entities.Orders;
 using eUseControl.Domain.Entities.Resps;
 using eUseControl.Domain.Entities.User;
+using eUseControl.Domain.Enums;
 
 namespace eUseControl.BusinessLogic.Core
 {
@@ -64,6 +66,7 @@ namespace eUseControl.BusinessLogic.Core
                 }
                 var orderitemsDto = orderItems.Select(oi => new OrderItemDTO
                 {
+                    Id = oi.Id,
                     DishName = oi.DishId.Name,
                     Amount = oi.Amount,
                     Note = oi.Note,
@@ -152,6 +155,8 @@ namespace eUseControl.BusinessLogic.Core
                         context.Dishes.Attach(dish);
                     }
                     context.Orders.Add(orderDbTable);
+
+                    TableDb.Status = TStatus.Occupied;
                     context.SaveChanges();
                 }
                 return new AdminResp
@@ -168,6 +173,87 @@ namespace eUseControl.BusinessLogic.Core
                     Message = $"Error creating order: {ex.Message}"
                 };
             }
+        }
+
+        internal AdminResp ChangeOrderItemStatusAction(int Id, DStatus status)
+        {
+            OrderItemDbTable orderItemDb;
+            int OrderId;
+            try
+            {
+                using (var context = new OrderContext())
+                {
+                    orderItemDb = context.OrderItems
+                        .Include("OrderId")
+                        .FirstOrDefault(item => item.Id == Id);
+
+                    if (orderItemDb == null)
+                    {
+                        return new AdminResp
+                        {
+                            Status = false,
+                            Message = $"Ошибка: заказ с Id = {Id} не найден."
+                        };
+                    }
+                    OrderId = orderItemDb.OrderId.Id;
+                    orderItemDb.Status = status;
+
+
+                    context.SaveChanges();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new AdminResp { Status = false ,Message = $"err : {ex.Message}"};
+
+            }
+
+            try 
+            {
+                List<OrderItemDbTable> orderItems;
+                using (var context = new OrderContext())
+                {
+                    orderItems = context.OrderItems
+                        .Include("OrderId")
+                        .Where(item => item.OrderId.Id == OrderId)
+                        .ToList();
+                }
+                
+                foreach (var orderItem in orderItems) 
+                {
+                    if(orderItem.Status != status)
+                    {
+                        return new AdminResp { Status = true };
+                    }
+
+                    using (var context = new OrderContext())
+                    {
+                        var ord = context.Orders
+                            .Include("TableId")
+                            .FirstOrDefault(o => o.Id == OrderId);
+
+                        ord.Status = status;
+
+                        if (status == DStatus.Completed)
+                        {
+                            var table = context.Tables.FirstOrDefault(t => t.Id == ord.TableId.Id);
+                            ord.CompletedTime = DateTime.Now;
+                            table.Status = TStatus.Free;
+
+                        }
+
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex) 
+            {
+                return new AdminResp { Status = false, Message = $"err : {ex.Message}" };
+            }
+
+
+            return new AdminResp { Status = true };
         }
 
     }

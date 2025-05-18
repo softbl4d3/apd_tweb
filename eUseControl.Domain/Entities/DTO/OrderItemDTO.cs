@@ -9,6 +9,7 @@ namespace eUseControl.Domain.Entities.DTO
 {
     public class OrderItemDTO
     {
+        public int Id { get; set; }
         public string DishName { get; set; }
         public string WaiterName { get; set; }
         public int TableNumber { get; set; }

@@ -29,27 +29,25 @@ namespace eUseControl.Web.Controllers.Admin
 
             List<TableViewModel> tables = tableDto.Select(t => new TableViewModel
             {
-
                 TableNumber = t.TableNumber,
                 Capacity = t.Capacity,
                 Zone = t.Zone,
                 Status = t.Status,
-
-            }).ToList();
+            })
+                .OrderBy(t => t.TableNumber)
+                .ToList();
 
             return View("~/Views/Admin/Tables/Dashboard.cshtml",tables);
         }
+
         [HttpGet]
-
-
         public ActionResult Add()
         {
 
             return View("~/Views/Admin/Tables/Add.cshtml");
         }
+
         [HttpPost]
-
-
         public ActionResult Add(TableViewModel table)
         {
             TableDTO tableDto = new TableDTO
@@ -70,9 +68,8 @@ namespace eUseControl.Web.Controllers.Admin
             }
 
         }
+
         [HttpGet]
-
-
         public ActionResult Edit(int TableNumber)
         {
             TableDTO tableDto = _tableLogic.GetTableById(TableNumber);
@@ -88,8 +85,6 @@ namespace eUseControl.Web.Controllers.Admin
         }
 
         [HttpPost]
-
-
         public ActionResult Edit(TableViewModel t)
         {
             var tableDto = new TableDTO
@@ -110,13 +105,13 @@ namespace eUseControl.Web.Controllers.Admin
                 return View("~/Views/Admin/Tables/Edit.cshtml", t);
             }
         }
-
-
         public ActionResult Delete(int TableNumber)
         {
             _tableLogic.DeleteTable(TableNumber);
             return RedirectToAction("Dashboard");
 
         }
+
+
     }
 }

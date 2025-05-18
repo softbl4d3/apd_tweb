@@ -23,6 +23,45 @@ namespace eUseControl.Web.Controllers.Admin
             return View("~/Views/Admin/Employees/Register.cshtml");
         }
 
+        public ActionResult Edit(string username)
+        {
+            var user = _session.GetUserByName(username);
+            if (user.UserName == null)
+            {
+                return RedirectToAction("List");
+            }
+            var model = new EmpRegViewModel
+            {
+                UserName = user.UserName,
+                Role = user.Role,
+                Password = string.Empty
+            };
+            return View("~/Views/Admin/Employees/Edit.cshtml", model);
+        }
+        [HttpPost]
+        public ActionResult Edit(EmpRegViewModel model) 
+        {
+            if (ModelState.IsValid)
+            {
+                UserDTO user = new UserDTO
+                {
+                    UserName = model.UserName,
+                    Password = model.Password,
+                    Role = (URole)model.Role
+                };
+                var responce = _session.Edit(user);
+                if (responce.Status == true)
+                {
+                    return RedirectToAction("List");
+                }
+                else
+                {
+                    return RedirectToAction("Register");
+                }
+            }
+                return null;
+        }
+
         // POST: /Admin/RegisterEmployee
         [HttpPost]
         [ValidateAntiForgeryToken]

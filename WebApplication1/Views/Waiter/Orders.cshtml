@@ -1,57 +1,118 @@
-@model List<WaiterOrderViewModel>
+﻿@model List<WaiterOrderViewModel>
 
 @{
-    ViewBag.Title = "My Orders";
+    ViewBag.Title = "Мои заказы";
 }
 
 <div class="container mt-4">
-    <h2 class="text-center mb-4">My Orders</h2>
+    <h2 class="text-center mb-4">Мои заказы</h2>
 
     @if (Model == null || !Model.Any())
     {
-        <div class="alert alert-info text-center">You have no orders yet.</div>
+        <div class="alert alert-info text-center">У вас пока нет заказов.</div>
     }
     else
     {
-        <table class="table table-bordered table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Table</th>
-                    <th>Status</th>
-                    <th>Total</th>
-                    <th>Comment</th>
-                    <th>Dishes</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var order in Model)
-                {
-                    <tr>
-                        <td>@order.TableNumber</td>
-                        <td>
-                            <span class="badge badge-default" style="background-color: #222; color: #fff;">@order.Status</span>
-                        </td>
+        // Разделяем заказы на текущие и выполненные
+        var currentOrders = Model.Where(o => o.Status != eUseControl.Domain.Enums.DStatus.Completed).ToList();
+        var completedOrders = Model.Where(o => o.Status == eUseControl.Domain.Enums.DStatus.Completed).ToList();
 
-
-                        <td>@order.TotalAmount.ToString("C")</td>
-                        <td>@order.OrderComment</td>
-                        <td>
-                            <ul class="mb-0">
-                                @foreach (var item in order.Items)
-                                {
-                                    <li>
-                                        <strong>@item.DishName</strong> &times; @item.Amount
-                                        @if (!string.IsNullOrWhiteSpace(item.Note))
+        // --- Секция "Текущие заказы" ---
+        if (currentOrders.Any())
+        {
+            <h3 class="mt-4 mb-3">Текущие заказы</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Стол</th>
+                            <th>Статус</th>
+                            <th>Сумма</th>
+                            <th>Комментарий</th>
+                            <th>Блюда</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in currentOrders)
+                        {
+                            <tr>
+                                <td>@order.TableNumber</td>
+                                <td>
+                                    @* Статус на черном фоне *@
+                                    <span class="badge" style="background-color: black; color: white;">@order.Status</span>
+                                </td>
+                                <td>@order.TotalAmount.ToString("C")</td>
+                                <td>@order.OrderComment</td>
+                                <td>
+                                    <ul class="mb-0 list-unstyled">
+                                        @foreach (var item in order.Items)
                                         {
-                                            <span class="text-muted">� @item.Note</span>
+                                            <li>
+                                                <strong>@item.DishName</strong> &times; @item.Amount
+                                                @if (!string.IsNullOrWhiteSpace(item.Note))
+                                                {
+                                                    <span class="text-muted">— @item.Note</span>
+                                                }
+                                            </li>
                                         }
-                                    </li>
-                                }
-                            </ul>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                                    </ul>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        if (completedOrders.Any())
+        {
+            if (currentOrders.Any())
+            {
+                <hr class="my-5">
+            }
+
+            <h3 class="mb-3">Выполненные заказы</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Стол</th>
+                            <th>Статус</th>
+                            <th>Сумма</th>
+                            <th>Комментарий</th>
+                            <th>Блюда</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in completedOrders)
+                        {
+                            <tr>
+                                <td>@order.TableNumber</td>
+                                <td>
+                                    @* Статус на черном фоне *@
+                                    <span class="badge" style="background-color: black; color: white;">@order.Status</span>
+                                </td>
+                                <td>@order.TotalAmount.ToString("C")</td>
+                                <td>@order.OrderComment</td>
+                                <td>
+                                    <ul class="mb-0 list-unstyled">
+                                        @foreach (var item in order.Items)
+                                        {
+                                            <li>
+                                                <strong>@item.DishName</strong> &times; @item.Amount
+                                                @if (!string.IsNullOrWhiteSpace(item.Note))
+                                                {
+                                                    <span class="text-muted">— @item.Note</span>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     }
 </div>

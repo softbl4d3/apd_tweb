@@ -1,1 +1,51 @@
-menu chef
+﻿@model List<eUseControl.Web.Models.IngridientViewModel>
+@using eUseControl.Domain.Enums
+
+@{
+    ViewBag.Title = "Ингредиенты";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Ингредиенты на кухне</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Количество</th>
+                <th>Текущий статус</th>
+                <th>Новый статус</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>@Model[i].Name</td>
+                    <td>@Model[i].Amount</td>
+                    <td>@Model[i].Status</td>
+                    <td>
+                        @using (Html.BeginForm("UpdateIngStatus", "Chef", FormMethod.Post))
+                        {
+                            <!-- Явно указываем имена с индексом -->
+                            <input type="hidden" name="Id" value="@Model[i].Id" />
+                            <input type="hidden" name="Name" value="@Model[i].Name" />
+                            <input type="hidden" name="Amount" value="@Model[i].Amount" />
+
+                            <select name="Status" class="form-select form-select-sm me-2">
+                                @foreach (var status in Enum.GetValues(typeof(IngridStaus)))
+                                {
+                                    <option value="@status" selected="@(status.Equals(Model[i].Status))">@status</option>
+                                }
+                            </select>
+
+                            <button type="submit" class="btn btn-success">Обновить</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

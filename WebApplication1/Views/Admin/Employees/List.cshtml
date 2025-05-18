@@ -28,7 +28,7 @@
                 <td>@employee.Role</td>
                 <td>
 
-                    @Html.ActionLink("Редактировать", "Edit", new { area = "Admin", id = employee.Id }, new { @class = "btn btn-sm btn-warning" }) 
+                    @Html.ActionLink("Редактировать", "Edit", new { area = "Admin", username = employee.UserName }, new { @class = "btn btn-sm btn-warning" }) 
                     @Html.ActionLink("Удалить", "Delete", new {area = "Admin", username = employee.UserName }, new { @class = "btn btn-sm btn-danger" })
                 </td>
             </tr>
