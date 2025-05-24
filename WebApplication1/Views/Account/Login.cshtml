@@ -1,31 +1,40 @@
 ﻿@model eUseControl.Domain.Entities.DTO.UserDTO
 
 @{
-    ViewBag.Title = "Логин для сотрудника";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Используем общий макет
+    ViewBag.Title = "Вход для сотрудников";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
-    <h2>Логин Для Сотрудников APD рестика</h2>
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5 col-xl-4">
+            <div class="card shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <h2 class="card-title h3 mb-0">Вход для сотрудников</h2>
+                        <p class="text-muted small">APD Ресторан</p>
+                    </div>
 
-    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
+                    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class="needs-validation", novalidate="" }))
+                    {
+                    @Html.AntiForgeryToken() 
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.UserName, "Имя")
-            @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    <div class="form-floating mb-3">
+                        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", id = "floatingUserName", placeholder = "Имя пользователя" })
+                        @Html.LabelFor(model => model.UserName, "Имя пользователя", new { @for = "floatingUserName" })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger small mt-1 d-block" })
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", id = "floatingPassword", placeholder = "Пароль" })
+                        @Html.LabelFor(model => model.Password, "Пароль", new { @for = "floatingPassword" })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger small mt-1 d-block" })
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 btn-lg mt-4">Войти</button>
+                    } 
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password, "Пароль")
-            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-        </div>
-
-        
-
-        <button type="submit" class="btn btn-primary">Зайти</button>
-    }
+    </div>
 </div>
