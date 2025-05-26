@@ -50,9 +50,13 @@ namespace eUseControl.Web.Controllers
             var profile = _sessionLogic.GetUserByCookie(apiCookie.Value);
             var allOrders = _orderLogic.GetAllOrders();
 
+            var todayStart = DateTime.Today;
+            var todayEnd = DateTime.Today.AddDays(1).AddTicks(-1);
 
             var myOrders = allOrders
-                .Where(o => o.WaiterName == profile.UserName)
+                .Where(o => o.WaiterName == profile.UserName
+                && o.CreatedAt >= todayStart
+                && o.CreatedAt <= todayEnd)
                 .Select(o => new WaiterOrderViewModel
                 {
                     TableNumber = o.TableNumber,

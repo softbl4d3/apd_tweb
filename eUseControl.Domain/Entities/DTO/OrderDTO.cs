@@ -19,7 +19,7 @@ namespace eUseControl.Domain.Entities.DTO
 
         public DStatus Status { get; set; }
 
-
+        public DateTime? CreatedAt { get; set; }
         public List<OrderItemDTO> OrderItems { get; set; }
     }
 

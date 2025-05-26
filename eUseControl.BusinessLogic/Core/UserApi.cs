@@ -20,7 +20,7 @@ namespace eUseControl.BusinessLogic.Core
 {
     public class UserApi 
     {
-        internal RegEmpResp RegisterEmployeeAction(UserDTO data)
+        internal RegEmpResp RegisterEmployeeAction(UserDTO data) 
         {
             try
             {

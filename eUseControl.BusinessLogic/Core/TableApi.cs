@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -100,12 +101,20 @@ namespace eUseControl.BusinessLogic.Core
                 using (var context = new OrderContext())
                 {
                     var existTable = context.Tables
-                        .Include("OrderId")
-                        .Include("OrderId.OrderItems")
                         .FirstOrDefault(t => t.TableNumber == Id);
 
+                    var orders = context.Orders
+                        .Where(o => o.TableId.TableNumber == Id)
+                        .ToList();
+
+                    var orderItems = context.OrderItems
+                        .Include("OrderId.TableId")
+                        .Where(oi => oi.OrderId.TableId.TableNumber == Id)
+                        .ToList();
                     if (existTable != null)
                     {
+                        context.Orders.RemoveRange(orders);
+                        context.OrderItems.RemoveRange(orderItems);
                         context.Tables.Remove(existTable);
                         context.SaveChanges();
 

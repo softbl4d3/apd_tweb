@@ -40,7 +40,8 @@ namespace eUseControl.BusinessLogic.Core
                         }).ToList(),
                         Note = o.Note,
                         TotalAmount = o.TotalAmount,
-                        Status = o.Status
+                        Status = o.Status,
+                        CreatedAt = o.CreatedAt,
                     }).ToList();
                 }
             }
@@ -119,6 +120,7 @@ namespace eUseControl.BusinessLogic.Core
                     TableDb = context.Tables.FirstOrDefault(t => t.TableNumber == order.TableNumber);
 
                     var orderItems = order.OrderItems
+                        
                         .Select(item =>
                         {
                             var dish = dishesDb.FirstOrDefault(d => d.Name == item.DishName);
