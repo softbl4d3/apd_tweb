@@ -11,11 +11,12 @@ namespace eUseControl.Helpers
     {
         public static string HashGen(string password)
         {
-            MD5 md5 = new MD5CryptoServiceProvider();
-            var originalBytes = Encoding.Default.GetBytes(password + "twutm2018");
-            var encodedBytes = md5.ComputeHash(originalBytes);
-
-            return BitConverter.ToString(encodedBytes).Replace("-", "").ToLower();
+            var salt = Encoding.Default.GetBytes("tung2000pol");
+            using (var rfc2898 = new Rfc2898DeriveBytes(password, salt, 10000))
+            {
+                var hash = rfc2898.GetBytes(32);
+                return BitConverter.ToString(hash).Replace("-", "").ToLower();
+            }
         }
     }
 }

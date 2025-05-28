@@ -41,6 +41,8 @@ namespace eUseControl.Web.Controllers
             }).ToList();
             return View("~/Views/Chef/Menu.cshtml", igredients);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult UpdateIngStatus(IngridientViewModel ing)
         {
             IngridientDTO ingDto = new IngridientDTO

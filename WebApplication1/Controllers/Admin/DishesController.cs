@@ -66,7 +66,6 @@ namespace eUseControl.Web.Controllers.Admin
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-
         public ActionResult Create(DishViewModel model)
         {
             if (ModelState.IsValid)

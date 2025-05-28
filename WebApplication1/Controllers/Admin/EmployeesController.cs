@@ -39,6 +39,7 @@ namespace eUseControl.Web.Controllers.Admin
             return View("~/Views/Admin/Employees/Edit.cshtml", model);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(EmpRegViewModel model) 
         {
             if (ModelState.IsValid)
@@ -65,7 +66,6 @@ namespace eUseControl.Web.Controllers.Admin
         // POST: /Admin/RegisterEmployee
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public ActionResult Register(EmpRegViewModel model)
         {
 

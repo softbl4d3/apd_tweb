@@ -130,6 +130,7 @@ namespace eUseControl.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult TakeOrder(OrderViewModel model)
         {
             if (ModelState.IsValid)
@@ -167,6 +168,7 @@ namespace eUseControl.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult MarkConfirmed(int id)
         {
             var status = DStatus.Completed;

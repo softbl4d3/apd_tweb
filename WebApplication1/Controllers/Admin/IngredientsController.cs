@@ -46,6 +46,7 @@ namespace eUseControl.Web.Controllers.Admin
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Add(IngridientViewModel Ingrid)
         {
             if (ModelState.IsValid)
@@ -84,7 +85,7 @@ namespace eUseControl.Web.Controllers.Admin
             return View("~/Views/Admin/Ingredients/Edit.cshtml", model);
         }
         [HttpPost]
-
+        [ValidateAntiForgeryToken]
 
         public ActionResult Edit(IngridientViewModel ing)
         {

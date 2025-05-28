@@ -48,6 +48,7 @@ namespace eUseControl.Web.Controllers.Admin
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Add(TableViewModel table)
         {
             TableDTO tableDto = new TableDTO
@@ -85,6 +86,7 @@ namespace eUseControl.Web.Controllers.Admin
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(TableViewModel t)
         {
             var tableDto = new TableDTO
