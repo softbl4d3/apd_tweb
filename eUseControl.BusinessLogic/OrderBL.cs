@@ -19,6 +19,9 @@ namespace eUseControl.BusinessLogic
 
         public List<OrderItemDTO> GetAllOrderItems() => GetAllOrderItemsAction();
 
+        public OrderDTO GetOrderById(int orderId) => GetOrderByIdAction(orderId);
+
+        public AdminResp ChangeOrder(OrderDTO order) => ChangeOrderAction(order);
         public AdminResp ChangeOrderItemStatus(int id, DStatus status) => ChangeOrderItemStatusAction(id, status);
     }
 }

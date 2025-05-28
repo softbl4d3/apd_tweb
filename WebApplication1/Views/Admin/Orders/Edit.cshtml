@@ -1,0 +1,93 @@
+﻿@model WaiterOrderViewModel
+
+@{
+    ViewBag.Title = "Редактировать заказ";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Убедитесь, что ваш макет подходит
+}
+
+<div class="container mt-4">
+    <h2>Редактировать заказ №@Model.OrderId</h2>
+    <hr />
+
+    @using (Html.BeginForm("Edit", "Orders", new { area = "Admin" }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.OrderId)
+        @Html.HiddenFor(model => model.TableNumber)
+        @Html.HiddenFor(model => model.CreatedAt)
+        @Html.HiddenFor(model => model.WaiterName)
+        @Html.HiddenFor(model => model.TotalAmount) 
+                    @Html.HiddenFor(model => model.CompletedTime) 
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.TableNumber, "Стол")
+                        @Html.TextBoxFor(model => model.TableNumber, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.WaiterName, "Официант")
+                        @Html.TextBoxFor(model => model.WaiterName, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.Status, "Статус")
+                        @Html.EnumDropDownListFor(model => model.Status, new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.OrderComment, "Комментарий к заказу")
+                        @Html.TextAreaFor(model => model.OrderComment, new { @class = "form-control", rows = 3 })
+                        @Html.ValidationMessageFor(model => model.OrderComment)
+                    </div>
+
+                    <h4 class="mt-4">Блюда в заказе:</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Блюдо</th>
+                                    <th>Количество</th>
+                                    <th>Комментарий к блюду</th>
+                                    <th>Статус блюда</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Items != null && Model.Items.Any())
+                                {
+                                    for (int i = 0; i < Model.Items.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.HiddenFor(model => model.Items[i].Id)
+                                                @Html.HiddenFor(model => model.Items[i].DishName)
+                                                @Html.DisplayFor(model => model.Items[i].DishName)
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.Items[i].Amount, new { @class = "form-control", type = "number", min = "0", style = "width: 80px;" })
+                                                @Html.ValidationMessageFor(model => model.Items[i].Amount)
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.Items[i].Note, new { @class = "form-control", placeholder = "Комментарий к блюду" })
+                                            </td>
+                                            <td>
+                                                @Html.EnumDropDownListFor(model => model.Items[i].Status, new { @class = "form-control" })
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center">В этом заказе нет блюд.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-group mt-4 text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Сохранить изменения</button>
+                        @Html.ActionLink("Назад к заказам", "Orders", new { area = "Admin" }, new { @class = "btn btn-secondary btn-lg ms-2" })
+                    </div>
+                }
+            </div>

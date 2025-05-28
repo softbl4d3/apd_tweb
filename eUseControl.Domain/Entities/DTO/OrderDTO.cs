@@ -11,24 +11,16 @@ namespace eUseControl.Domain.Entities.DTO
 {
     public class OrderDTO
     {
+        public int Id { get; set; }
         public string WaiterName { get; set; }
         public int TableNumber { get; set; }
         public string Note { get; set; }
-        
         public decimal TotalAmount { get; set; }
-
         public DStatus Status { get; set; }
-
-        public DateTime? CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime CompletedTime { get; set; }
         public List<OrderItemDTO> OrderItems { get; set; }
     }
 
-        //public TableDbTable TableId { get; set; }
-        //public UserDbTable WaiterId { get; set; }
-        //public DateTime CompletedTime { get; set; }
-        //public DStatus Status { get; set; }
-        //public decimal TotalAmount { get; set; }
-        //public string Note { get; set; }
-        //public List<OrderItemDbTable> OrderItems { get; set; }
 
     }

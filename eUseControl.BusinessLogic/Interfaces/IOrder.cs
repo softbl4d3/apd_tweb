@@ -15,6 +15,9 @@ namespace eUseControl.BusinessLogic.Interfaces
         List<OrderItemDTO> GetAllOrderItems();
         //AdminResp DeleteOrder(int Id);
         List<OrderDTO> GetAllOrders();
+        OrderDTO GetOrderById(int OrderId);
+
+        AdminResp ChangeOrder(OrderDTO order);
         AdminResp ChangeOrderItemStatus(int id, DStatus status);
         //OrderDTO GetOrderById(int orderId);
         //List<OrderDTO> GetOrdersByTableId(int tableId);

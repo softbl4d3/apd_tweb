@@ -275,6 +275,7 @@
     <Content Include="Scripts\esm\popper.js.map" />
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
+    <Compile Include="Controllers\Admin\OrdersController.cs" />
     <Compile Include="Models\ChefOrderItemViewModel.cs" />
     <Compile Include="Models\OrderItemViewModel.cs" />
     <Compile Include="Models\OrderViewModel.cs" />
@@ -459,6 +460,8 @@
     <Content Include="Views\Waiter\Orders.cshtml" />
     <Content Include="Views\Waiter\OrderItems.cshtml" />
     <Content Include="Views\Admin\Employees\Edit.cshtml" />
+    <Content Include="Views\Admin\Orders\Index.cshtml" />
+    <Content Include="Views\Admin\Orders\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -468,7 +471,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Admin\Orders\" />
     <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>

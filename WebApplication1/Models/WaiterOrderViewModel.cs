@@ -10,6 +10,9 @@ public class WaiterOrderViewModel
     public DStatus Status { get; set; }
     public decimal TotalAmount { get; set; }
     public string OrderComment { get; set; }
+    public string WaiterName { get; set; }
+    public DateTime CompletedTime { get; set; }
+    public DateTime CreatedAt { get; set; }
     public List<OrderItemViewModel> Items { get; set; }
 }
 

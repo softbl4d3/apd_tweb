@@ -29,6 +29,7 @@ namespace eUseControl.BusinessLogic.Core
                         .ToList();
                     return orders.Select(o => new OrderDTO
                     {
+                        Id = o.Id,
                         TableNumber = o.TableId.TableNumber,
                         WaiterName = o.WaiterId.UserName,
                         OrderItems = o.OrderItems.Select(oi => new OrderItemDTO
@@ -43,6 +44,7 @@ namespace eUseControl.BusinessLogic.Core
                         TotalAmount = o.TotalAmount,
                         Status = o.Status,
                         CreatedAt = o.CreatedAt,
+                        CompletedTime = o.CompletedTime
                     }).ToList();
                 }
             }
@@ -82,7 +84,7 @@ namespace eUseControl.BusinessLogic.Core
             }
             catch (Exception)
             {
-                return new List<OrderItemDTO>();   
+                return new List<OrderItemDTO>();
             }
         }
 
@@ -121,7 +123,7 @@ namespace eUseControl.BusinessLogic.Core
                     TableDb = context.Tables.FirstOrDefault(t => t.TableNumber == order.TableNumber);
 
                     var orderItems = order.OrderItems
-                        
+
                         .Select(item =>
                         {
                             var dish = dishesDb.FirstOrDefault(d => d.Name == item.DishName);
@@ -209,7 +211,7 @@ namespace eUseControl.BusinessLogic.Core
             }
             catch (Exception ex)
             {
-                return new AdminResp { Status = false ,Message = $"err : {ex.Message}"};
+                return new AdminResp { Status = false, Message = $"err : {ex.Message}" };
 
             }
             try
@@ -237,7 +239,7 @@ namespace eUseControl.BusinessLogic.Core
                             }
                         }
 
-                        
+
 
                         context.SaveChanges();
                     }
@@ -248,7 +250,7 @@ namespace eUseControl.BusinessLogic.Core
                 return new AdminResp { Status = false, Message = $"err : {ex.Message}" };
             }
 
-            try 
+            try
             {
                 List<OrderItemDbTable> orderItems;
                 using (var context = new OrderContext())
@@ -258,10 +260,10 @@ namespace eUseControl.BusinessLogic.Core
                         .Where(item => item.OrderId.Id == OrderId)
                         .ToList();
                 }
-                
-                foreach (var orderItem in orderItems) 
+
+                foreach (var orderItem in orderItems)
                 {
-                    if(orderItem.Status != status)
+                    if (orderItem.Status != status)
                     {
                         return new AdminResp { Status = true };
                     }
@@ -286,14 +288,132 @@ namespace eUseControl.BusinessLogic.Core
                     }
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return new AdminResp { Status = false, Message = $"err : {ex.Message}" };
             }
-            
+
 
             return new AdminResp { Status = true };
         }
 
+        internal OrderDTO GetOrderByIdAction(int orderId)
+        {
+            try
+            {
+                using (var context = new OrderContext())
+                {
+                    var order = context.Orders
+                        .Include("TableId")
+                        .Include("WaiterId")
+                        .Include("OrderItems.DishId")
+                        .FirstOrDefault(o => o.Id == orderId);
+                    if (order == null)
+                    {
+                        return null;
+                    }
+                    return new OrderDTO
+                    {
+                        Id = order.Id,
+                        TableNumber = order.TableId.TableNumber,
+                        WaiterName = order.WaiterId.UserName,
+                        OrderItems = order.OrderItems.Select(oi => new OrderItemDTO
+                        {
+                            DishName = oi.DishId.Name,
+                            Amount = oi.Amount,
+                            Note = oi.Note,
+                            Status = oi.Status,
+                            TableNumber = oi.OrderId.TableId.TableNumber,
+                        }).ToList(),
+                        Note = order.Note,
+                        TotalAmount = order.TotalAmount,
+                        Status = order.Status,
+                        CreatedAt = order.CreatedAt,
+                        CompletedTime = order.CompletedTime
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching order by ID: {ex.Message}");
+                return null;
+            }
+        }
+
+        internal AdminResp ChangeOrderAction(OrderDTO order)
+        {
+            try
+            {
+                using (var context = new OrderContext())
+                {
+                    var orderDb = context.Orders
+                        .Include("TableId")
+                        .Include("WaiterId")
+                        .Include("OrderItems.DishId")
+                        .FirstOrDefault(o => o.Id == order.Id);
+                    if (orderDb == null)
+                    {
+                        return new AdminResp { Status = false, Message = "Order not found" };
+                    }
+
+                    orderDb.Note = order.Note;
+                    orderDb.Status = order.Status;
+                    orderDb.TotalAmount = order.TotalAmount;
+
+                    if (orderDb.TableId.TableNumber != order.TableNumber)
+                    {
+                        var newTable = context.Tables.FirstOrDefault(t => t.TableNumber == order.TableNumber);
+                        if (newTable != null)
+                        {
+                            orderDb.TableId = newTable;
+                        }
+                    }
+
+                    var existingItems = orderDb.OrderItems.ToList();
+                    foreach (var item in existingItems)
+                    {
+                        context.OrderItems.Remove(item);
+                    }
+
+                    var dishes = context.Dishes.ToList();
+                    var newOrderItems = order.OrderItems.Select(oi =>
+                    {
+                        var dish = dishes.FirstOrDefault(d => d.Name == oi.DishName);
+                        return new OrderItemDbTable
+                        {
+                            DishId = dish,
+                            Amount = oi.Amount,
+                            Price = (dish?.Price ?? 0) * oi.Amount,
+                            Note = oi.Note,
+                            Status = oi.Status,
+                            OrderId = orderDb
+                        };
+                    }).ToList();
+                    foreach (var newItem in newOrderItems)
+                    {
+                        context.OrderItems.Add(newItem);
+                    }
+                    orderDb.OrderItems = newOrderItems;
+
+
+                    if (order.Status == DStatus.Completed)
+                    {
+                        orderDb.CompletedTime = DateTime.Now;
+                        var table = context.Tables.FirstOrDefault(t => t.Id == orderDb.TableId.Id);
+                        if (table != null)
+                        {
+                            table.Status = TStatus.Free;
+                        }
+                    }
+
+                    context.SaveChanges();
+                }
+                return new AdminResp { Status = true, Message = "Order updated successfully" };
+            }
+            catch (Exception ex)
+            {
+                return new AdminResp { Status = false, Message = $"Error updating order: {ex.Message}" };
+            }
+        }
     }
 }
