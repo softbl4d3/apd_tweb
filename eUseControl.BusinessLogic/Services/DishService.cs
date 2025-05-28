@@ -16,11 +16,11 @@ namespace eUseControl.BusinessLogic.Services
             if (dish.Ingredients == null || !dish.Ingredients.Any())
                 return false;
 
-            foreach (var ingredient in dish.Ingredients)
-            {
-                if (ingredient.Status == IngridStaus.Unavailable)
-                    return false;
-            }
+            //foreach (var ingredient in dish.Ingredients)
+            //{
+            //    if (ingredient.Status == IngridStaus.Unavailable)
+            //        return false;
+            //}
 
             return true;
         }

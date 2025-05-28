@@ -25,14 +25,13 @@ namespace eUseControl.BusinessLogic.Core
                 IsAvailable = dish.IsAvailable,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
-                Ingredients = new List<IngridientDbTable>()
+                Ingredients = new List<DishIngredients>()
             };
 
             try
             {
                 using (var context = new OrderContext())
                 {
-                    // Проверка: блюдо с таким названием уже существует?
                     var existingDish = context.Dishes.FirstOrDefault(d => d.Name == newDish.Name);
                     if (existingDish != null)
                     {
@@ -43,10 +42,10 @@ namespace eUseControl.BusinessLogic.Core
                         };
                     }
 
-                    // Теперь проходим по каждому ингредиенту по имени
+                    context.Dishes.Add(newDish);
+
                     foreach (var ingredientDto in dish.Ingredients)
                     {
-                        // Находим ингредиент в базе по имени
                         var ingredientInDb = context.Ingridients
                             .FirstOrDefault(i => i.Name == ingredientDto.Name);
 
@@ -59,16 +58,17 @@ namespace eUseControl.BusinessLogic.Core
                             };
                         }
 
-                        // Связываем ингредиент и блюдо
-                        if (ingredientInDb.Dishes == null)
-                            ingredientInDb.Dishes = new List<DishDbTable>();
+                        var dishIngredient = new DishIngredients
+                        {
+                            Dish = newDish,
+                            Ingredient = ingredientInDb,
+                            Quantity = ingredientDto.Quantity 
+                        };
 
-                        ingredientInDb.Dishes.Add(newDish);
-                        newDish.Ingredients.Add(ingredientInDb);
+                        newDish.Ingredients.Add(dishIngredient);
                     }
 
-                    // Добавляем блюдо в базу
-                    context.Dishes.Add(newDish);
+
                     context.SaveChanges();
                 }
 
@@ -91,73 +91,53 @@ namespace eUseControl.BusinessLogic.Core
         public AdminResp EditDishAction(DishDTO dishDto)
         {
             try
-            {   
-                using(var context = new OrderContext())
+            {
+                using (var context = new OrderContext())
                 {
-                    var existDish = context.Dishes.FirstOrDefault(d => d.Id == dishDto.Id);
-                    
-                    if(existDish == null)
+                    var existingDish = context.Dishes
+                        .Include(d => d.Ingredients)
+                        .FirstOrDefault(d => d.Id == dishDto.Id);
+
+                    if (existingDish == null)
                     {
-                        return new AdminResp
-                        {
-                            Status = false,
-                            Message = "dish is no exist"
-                        };
+                        return new AdminResp { Status = false, Message = "Dish does not exist" };
                     }
-                }
 
-            }
+                    existingDish.Name = dishDto.Name;
+                    existingDish.Description = dishDto.Description;
+                    existingDish.Category = dishDto.Category;
+                    existingDish.IsAvailable = dishDto.IsAvailable;
+                    existingDish.Price = dishDto.Price;
+                    existingDish.UpdatedAt = DateTime.Now;
 
-            catch(Exception ex)
-            {
-                return new AdminResp
-                {
-                    Status = false,
-                    Message = $"Something went wrong:{ex.Message}"
-                };
-            }
-            try
-            {
-                DishDbTable dishDb = new DishDbTable
-                {
-                    Id = dishDto.Id,
-                    Name = dishDto.Name,
-                    Description = dishDto.Description,
-                    Category = dishDto.Category,
-                    IsAvailable = dishDto.IsAvailable,
-                    Price = dishDto.Price,
-                    Ingredients = dishDto.Ingredients.Select(i => new IngridientDbTable
+                    context.DishIngredients.RemoveRange(existingDish.Ingredients);
+
+                    if (dishDto.Ingredients != null)
                     {
-                        Id = i.Id,
-                        Amount = i.Amount,
-                        Name = i.Name,
-                        Status = i.Status,
-                    }).ToList(),
+                        foreach (var ingredientDto in dishDto.Ingredients)
+                        {
+                            var ingredient = context.Ingridients.FirstOrDefault(n=>n.Name == ingredientDto.Name);
+                            if (ingredient != null)
+                            {
+                                existingDish.Ingredients.Add(new DishIngredients
+                                {
+                                    Dish = existingDish,
+                                    Ingredient = ingredient,
+                                    Quantity = ingredientDto.Quantity
+                                });
+                            }
+                        }
+                    }
 
-                    UpdatedAt = DateTime.Now,
-                    
-                };
-
-                using(var context = new OrderContext())
-                {
-                    context.Dishes.AddOrUpdate(dishDb);
                     context.SaveChanges();
+                    return new AdminResp { Status = true, Message = "Dish updated successfully" };
                 }
             }
             catch (Exception ex)
             {
-                return new AdminResp
-                {
-                    Status = false,
-                    Message = $"Something went wrong:{ex.Message}"
-                };
+                Console.WriteLine($"Error editing dish: {ex}");
+                return new AdminResp { Status = false, Message = $"Error: {ex.Message}" };
             }
-
-            return new AdminResp
-            {
-                Status = true,
-                Message =  "superguuud"
-            };
         }
 
         public List<DishDTO> GetAllDishesAction()
@@ -167,9 +147,11 @@ namespace eUseControl.BusinessLogic.Core
                 List<DishDbTable> DishesDb;
                 using (var context = new OrderContext())
                 {
-                    DishesDb = context.Dishes.ToList();
+                    DishesDb = context.Dishes
+                        .Include("Ingredients")
+                        .ToList();
                 }
-                List<DishDTO> Dishes = DishesDb.Select(x => new DishDTO
+                var dishes = DishesDb.Select(x => new DishDTO
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -177,29 +159,36 @@ namespace eUseControl.BusinessLogic.Core
                     Category = x.Category,
                     Price = x.Price,
                     IsAvailable = x.IsAvailable,
+                    Ingredients = x.Ingredients?.Select(i => new IngridientDTO
+                    {
+                        Id = i.Ingredient?.Id ?? 0,
+                        Name = i.Ingredient?.Name ?? "Unknown ingredient",
+                        Quantity = i.Quantity
+                    }).ToList() ?? new List<IngridientDTO>()
                 }).ToList();
-                return Dishes;
+
+                return dishes;
             }
             catch (Exception ex)
             {
-                Console.Write($"Имя: {ex.Message}");
-
+                Console.WriteLine($"Ошибка при получении блюд: {ex.Message}");
+                Console.WriteLine(ex.ToString());
                 return new List<DishDTO>();
             }
-
         }
         public DishDTO GetDishByIdAction(int Id)
         {
-
             try
             {
                 DishDbTable dishDb;
                 using (var context = new OrderContext())
                 {
                     dishDb = context.Dishes
-                         .Include(d => d.Ingredients)
-                         .FirstOrDefault(d=> d.Id == Id);
+                        .Include("Ingredients")
+                        .Include("Ingredients.Ingredient")
+                        .FirstOrDefault(d => d.Id == Id);
                 }
+
                 if (dishDb != null)
                 {
                     DishDTO dishDto = new DishDTO
@@ -210,57 +199,68 @@ namespace eUseControl.BusinessLogic.Core
                         Category = dishDb.Category,
                         Price = dishDb.Price,
                         IsAvailable = dishDb.IsAvailable,
-                        Ingredients = dishDb.Ingredients != null
-                            ? dishDb.Ingredients.Select(x => new IngridientDTO
-                            {
-                                Id = x.Id,
-                                Name = x.Name,
-                                Amount = x.Amount,
-                                Status = x.Status,
-                            }).ToList()
-                            : new List<IngridientDTO>(),
-
+                        Ingredients = dishDb.Ingredients?.Select(x => new IngridientDTO
+                        {
+                            Id = x.Ingredient.Id, 
+                            Name = x.Ingredient.Name, 
+                            Amount = x.Ingredient.Amount, 
+                            Status = x.Ingredient.Status, 
+                            Quantity = x.Quantity 
+                        }).ToList() ?? new List<IngridientDTO>()
                     };
 
                     return dishDto;
                 }
-                else { return new DishDTO(); }
+                else
+                {
+                    return new DishDTO();
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error : {ex.Message}");
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine(ex.StackTrace); 
                 return new DishDTO();
             }
-
         }
         public AdminResp DeleteDishAction(int Id)
         {
             try
             {
-                DishDbTable ExistingDish;
                 using (var context = new OrderContext())
                 {
-                    ExistingDish = context.Dishes.FirstOrDefault(i => i.Id == Id);
+                    var existingDish = context.Dishes
+                        .Include(d => d.Ingredients)
+                        .FirstOrDefault(d => d.Id == Id);
 
-                    if (ExistingDish != null)
-                    {
-
-                        context.Dishes.Remove(ExistingDish);
-                        context.SaveChanges();
-
-                        return new AdminResp
-                        {
-                            Status = true
-                        };
-                    }
-                    else
+                    if (existingDish == null)
                     {
                         return new AdminResp
                         {
                             Status = false,
-                            Message = "item is no exist"
+                            Message = "Dish not found"
                         };
                     }
+
+                    var ingredientsToRemove = existingDish.Ingredients.ToList();
+                    foreach (var ingredient in ingredientsToRemove)
+                    {
+                        context.Entry(ingredient).State = EntityState.Deleted;
+                    }
+                    var orderItemsToRemove = context.OrderItems
+                        .Where(oi => oi.DishId.Id == existingDish.Id)
+                        .ToList();
+
+                    context.OrderItems.RemoveRange(orderItemsToRemove);
+                    context.Dishes.Remove(existingDish);
+
+                    context.SaveChanges();
+
+                    return new AdminResp
+                    {
+                        Status = true,
+                        Message = "Dish and its ingredient relations successfully deleted"
+                    };
                 }
             }
             catch (Exception ex)
@@ -268,10 +268,9 @@ namespace eUseControl.BusinessLogic.Core
                 return new AdminResp
                 {
                     Status = false,
-                    Message = $"something went wrong, message = {ex.Message}"
+                    Message = $"Error deleting dish: {ex.Message}"
                 };
             }
-
         }
     }
 }

@@ -68,6 +68,7 @@
     <Compile Include="Interfaces\IOrder.cs" />
     <Compile Include="Interfaces\ITable.cs" />
     <Compile Include="Interfaces\IUser.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\OrderMigrations\202504261231054_InitialCreate.cs" />
     <Compile Include="Migrations\OrderMigrations\202504261231054_InitialCreate.Designer.cs">
       <DependentUpon>202504261231054_InitialCreate.cs</DependentUpon>
@@ -87,6 +88,14 @@
     <Compile Include="Migrations\OrderMigrations\202505121923279_test333.cs" />
     <Compile Include="Migrations\OrderMigrations\202505121923279_test333.Designer.cs">
       <DependentUpon>202505121923279_test333.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\OrderMigrations\202505262047264_InitialCreate1.cs" />
+    <Compile Include="Migrations\OrderMigrations\202505262047264_InitialCreate1.Designer.cs">
+      <DependentUpon>202505262047264_InitialCreate1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\OrderMigrations\202505262100492_InitialCreate2.cs" />
+    <Compile Include="Migrations\OrderMigrations\202505262100492_InitialCreate2.Designer.cs">
+      <DependentUpon>202505262100492_InitialCreate2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\OrderMigrations\Configuration.cs" />
     <Compile Include="Migrations\UserMigrations\202505052021066_addedSession.cs" />
@@ -178,6 +187,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\OrderMigrations\202505121923279_test333.resx">
       <DependentUpon>202505121923279_test333.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\OrderMigrations\202505262047264_InitialCreate1.resx">
+      <DependentUpon>202505262047264_InitialCreate1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\OrderMigrations\202505262100492_InitialCreate2.resx">
+      <DependentUpon>202505262100492_InitialCreate2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\UserMigrations\202505052021066_addedSession.resx">
       <DependentUpon>202505052021066_addedSession.cs</DependentUpon>

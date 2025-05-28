@@ -16,6 +16,6 @@ namespace eUseControl.Domain.Entities.Orders
         public DCategory Category { get; set; }
         public decimal Price { get; set; }
         public bool IsAvailable { get; set; }
-        public List<IngridientDbTable> Ingredients { get; set; }
+        public List<DishIngredients> Ingredients { get; set; }
     }
 }

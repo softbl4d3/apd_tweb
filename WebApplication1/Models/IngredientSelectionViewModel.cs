@@ -11,6 +11,7 @@ namespace eUseControl.Web.Models
     {
         public string Name { get; set; }
         public int Amount { get; set; }
+        public int Quantity { get; set; }
         public IngridStaus Status { get; set; }
         public bool Selected { get; set; }
     }

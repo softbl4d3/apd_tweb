@@ -1,4 +1,4 @@
-﻿namespace eUseControl.BusinessLogic.Migrations.OrderMigrations
+﻿namespace eUseControl.BusinessLogic.Migrations
 {
     using System;
     using System.Data.Entity;
@@ -10,8 +10,6 @@
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            MigrationsDirectory = @"Migrations\OrderMigrations";
-            ContextKey = "eUseControl.BusinessLogic.DBModel.OrderContext";
         }
 
         protected override void Seed(eUseControl.BusinessLogic.DBModel.OrderContext context)

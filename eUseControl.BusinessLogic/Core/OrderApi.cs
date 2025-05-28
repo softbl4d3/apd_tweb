@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -187,6 +188,7 @@ namespace eUseControl.BusinessLogic.Core
                 {
                     orderItemDb = context.OrderItems
                         .Include("OrderId")
+                        .Include("DishId")
                         .FirstOrDefault(item => item.Id == Id);
 
                     if (orderItemDb == null)
@@ -209,6 +211,41 @@ namespace eUseControl.BusinessLogic.Core
             {
                 return new AdminResp { Status = false ,Message = $"err : {ex.Message}"};
 
+            }
+            try
+            {
+                if (status == DStatus.Ready)
+                {
+                    using (var context = new OrderContext())
+                    {
+                        var dishDb = context.Dishes
+                            .Where(d => d.Id == orderItemDb.DishId.Id)
+                            .FirstOrDefault();
+
+                        var igredientsQuantity = context.DishIngredients
+                            .Include("Ingredient")
+                            .Include("Dish")
+                            .Where(d => d.Dish.Id == dishDb.Id)
+                            .ToList();
+
+                        foreach (var item in igredientsQuantity)
+                        {
+                            item.Ingredient.Amount -= (item.Quantity * orderItemDb.Amount);
+                            if (item.Ingredient.Amount < (item.Quantity * orderItemDb.Amount) * 3)
+                            {
+                                item.Ingredient.Status = IngridStaus.Low;
+                            }
+                        }
+
+                        
+
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new AdminResp { Status = false, Message = $"err : {ex.Message}" };
             }
 
             try 
@@ -253,7 +290,7 @@ namespace eUseControl.BusinessLogic.Core
             {
                 return new AdminResp { Status = false, Message = $"err : {ex.Message}" };
             }
-
+            
 
             return new AdminResp { Status = true };
         }

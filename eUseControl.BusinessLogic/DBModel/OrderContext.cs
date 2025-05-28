@@ -19,7 +19,7 @@ namespace eUseControl.BusinessLogic.DBModel
         public DbSet<DishDbTable> Dishes { get; set; }
         public DbSet<IngridientDbTable> Ingridients { get; set; }
         public DbSet<TableDbTable> Tables { get; set; }
-
+        public DbSet<DishIngredients> DishIngredients { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("public");

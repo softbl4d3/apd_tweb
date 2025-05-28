@@ -86,7 +86,8 @@ namespace eUseControl.Web.Controllers.Admin
                             {
                                 Name = i.Name,
                                 Amount = i.Amount,
-                                Status = i.Status
+                                Status = i.Status,
+                                Quantity = i.Quantity,
                             })
                             .ToList()
                 };
@@ -120,35 +121,40 @@ namespace eUseControl.Web.Controllers.Admin
                     Name = ingredient.Name,
                     Amount = dishDto.Ingredients.FirstOrDefault(x => x.Id == ingredient.Id)?.Amount ?? 0,
                     Status = ingredient.Status,
+                    Quantity = dishDto.Ingredients.FirstOrDefault(x => x.Id == ingredient.Id)?.Quantity ?? 0,
                     Selected = dishDto.Ingredients.Any(x => x.Id == ingredient.Id)
                 }).ToList()
             };
 
-            return View("~/Views/Admin/Dish/Create.cshtml", dish);
+            return View("~/Views/Admin/Dish/Edit.cshtml", dish);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(DishViewModel updatedDish)
+        public ActionResult Edit(DishViewModel model)
         {
             if (ModelState.IsValid)
             {
-                DishDTO dishDto = new DishDTO
+                var selectedIngredients = model.Ingredients.Where(i => i.Selected).ToList();
+
+                var dishDto = new DishDTO
                 {
-                    Id = updatedDish.Id,
-                    Name = updatedDish.Name,
-                    Description = updatedDish.Description,
-                    Category = updatedDish.Category,
-                    Price = updatedDish.Price,
-                    IsAvailable = updatedDish.IsAvailable,
-                    Ingredients = updatedDish.Ingredients
-                    .Where(i => i.Selected == true)
-                    .Select(i => new IngridientDTO
-                    {
-                        Name = i.Name,
-                        Amount = i.Amount,
-                        Status = i.Status
-                    }).ToList()
+                    Id = model.Id,
+                    Name = model.Name,
+                    Description = model.Description,
+                    Category = model.Category,
+                    Price = model.Price,
+                    IsAvailable = model.IsAvailable,
+                    Ingredients = model.Ingredients
+                            .Where(i => i.Selected)
+                            .Select(i => new IngridientDTO
+                            {
+                                Name = i.Name,
+                                Amount = i.Amount,
+                                Status = i.Status,
+                                Quantity = i.Quantity,
+                            })
+                            .ToList()
                 };
                 _dishLogic.EditDish(dishDto);
             }

@@ -2,59 +2,86 @@
 
 @{
     ViewBag.Title = "Редактировать блюдо";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Убедитесь, что путь правильный
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container mt-4">
     <h2>@ViewBag.Title</h2>
     <hr />
 
-    @using (Html.BeginForm("Edit", "Dish", new { area = "Admin" }, FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("Edit", "Dishes", new { area = "Admin" }, FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(model => model.Name) <!-- Важно для сохранения ID -->
+        @Html.HiddenFor(model => model.Id)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, "Название", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.Name)
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Price, "Цена", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.Price, new { @class = "form-control", type = "number", step = "0.01" })
-                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-            </div>
+            @Html.LabelFor(model => model.Description)
+            @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.IsAvailable, "Доступно", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.CheckBoxFor(model => model.IsAvailable, new { @class = "form-check-input" })
-            </div>
+            @Html.LabelFor(model => model.Category)
+            @Html.EnumDropDownListFor(model => model.Category, new { @class = "form-control" })
         </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price)
+            @Html.TextBoxFor(model => model.Price, new { @class = "form-control", type = "number" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsAvailable)
+            @Html.CheckBoxFor(model => model.IsAvailable)
+        </div>
+
         <h4>Ингредиенты:</h4>
-        <ul>
-            @for (int i = 0; i < Model.Ingredients.Count; i++)
-            {
-                <li>
-                    @Html.CheckBoxFor(model => model.Ingredients[i].Selected)
-                    @Html.HiddenFor(model => model.Ingredients[i].Name)
-                    @Html.HiddenFor(model => model.Ingredients[i].Amount)
-                    @Html.HiddenFor(model => model.Ingredients[i].Status)
-                    @Model.Ingredients[i].Name (@Model.Ingredients[i].Amount) - @Model.Ingredients[i].Status
-                </li>
-            }
-        </ul>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Выбрать</th>
+                    <th>Ингредиент</th>
+                    <th>Количество</th>
+                    <th>Доступно</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Ingredients.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Html.CheckBoxFor(model => model.Ingredients[i].Selected)
+                            @Html.HiddenFor(model => model.Ingredients[i].Name)
+                            @Html.HiddenFor(model => model.Ingredients[i].Amount)
+                            @Html.HiddenFor(model => model.Ingredients[i].Status)
+                        </td>
+                        <td>@Model.Ingredients[i].Name</td>
+                        <td>
+                            @Html.TextBoxFor(model => model.Ingredients[i].Quantity,
+                                   new
+                                   {
+                                       @class = "form-control",
+                                       type = "number",
+                                       min = "0",
+                                       style = "width: 80px;"
+                                   })
+                        </td>
+                        <td>@Model.Ingredients[i].Amount</td>
+                        <td>@Model.Ingredients[i].Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-primary">Сохранить</button>
-                @Html.ActionLink("Отмена", "Menu", new {area = "Admin"}, new { @class = "btn btn-secondary ml-2" })
-            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            @Html.ActionLink("Отмена", "Menu", new { area = "Admin" }, new { @class = "btn btn-secondary ml-2" })
         </div>
     }
 </div>

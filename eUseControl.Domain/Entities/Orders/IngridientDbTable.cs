@@ -15,6 +15,6 @@ namespace eUseControl.Domain.Entities.Orders
         public string Name { get; set; }
         public int Amount { get; set; }
         public IngridStaus Status { get; set; }
-        public List<DishDbTable> Dishes { get; set; }
+        public List<DishIngredients> Dishes { get; set; }
     }
 }
