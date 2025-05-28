@@ -16,13 +16,11 @@ namespace eUseControl.Web.Controllers
 
     public class ChefController : Controller
     {
-        private readonly IUser _sessionLogic;
         private readonly IOrder _orderLogic;
         private readonly IIngredient _ingLogic; 
         public ChefController()
         {
             var bl = new BusinessLogic.BusinessLogic();
-            _sessionLogic = bl.GetSessionBL();
             _orderLogic = bl.GetOrderBL();
             _ingLogic = bl.GetIngredientBL();
         }
